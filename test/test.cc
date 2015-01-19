@@ -138,6 +138,14 @@ void movePlayer()
 		playerPosx += 10;
 	if (playerMoveLeft)
 		playerPosx -=10;
+	if (playerPosx < 0)
+		playerPosx = 800;
+	if (playerPosx > 800)
+		playerPosx = 0;
+	if (playerPosy < 0)
+		playerPosy = 600;
+	if (playerPosy > 600)
+		playerPosy = 0;
 }
 
 void Render()
