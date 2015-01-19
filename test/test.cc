@@ -4,6 +4,7 @@
  
 /* THIS IS A COMMENT. YOU SHOULD BE ABLE TO READ THIS. */
 /* Ferb's comment */
+// lololololololol
  
 // Size of the window
 int sizeX = 800;
