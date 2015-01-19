@@ -1,7 +1,8 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include "SDL2/SDL2_gfxPrimitives.h"
- 
+
+/* BLERGH */
  
 // Size of the window
 int sizeX = 800;
