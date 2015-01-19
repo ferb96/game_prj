@@ -3,6 +3,7 @@
 #include "SDL2/SDL2_gfxPrimitives.h"
  
 /* THIS IS A COMMENT. YOU SHOULD BE ABLE TO READ THIS. */
+/* Ferb's comment */
  
 // Size of the window
 int sizeX = 800;
