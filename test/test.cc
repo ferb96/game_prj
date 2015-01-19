@@ -19,16 +19,25 @@ bool CreateWindow();
 bool CreateRenderer();
 void SetupRenderer();
  
+void movePlayer();
 void Render();
 void RunGame();
 void close();
- 
+
+
+bool playerMoveUp = false;
+bool playerMoveDown = false;
+bool playerMoveLeft = false;
+bool playerMoveRight = false; 
 // Positions of player
 int playerPosx = 20;
 int playerPosy = 20;
 int playerPosw = 20;
 int playerPosh = 20;
 
+// Velocity of player
+int playerVelx = 0;
+int playerVely = 0;
 
 // The main program
 int main( int argc, char* args[] )
@@ -56,38 +65,58 @@ void RunGame()
 		SDL_Event event;
 		while ( SDL_PollEvent( &event ) )
 		{
-			// Quit if the user press the X button at the corner, used command-Q, Alt-F4 or stuff like that
-			if ( event.type == SDL_QUIT )
-				loop = false;
-
-			// If the user pressed a key on the keyboard
-			else if ( event.type == SDL_KEYDOWN )
-			{
-				switch ( event.key.keysym.sym )
-				{
-					// Move the user
-					case SDLK_RIGHT:
-						playerPosx += 10;
-						break;
-					case SDLK_LEFT:
-						playerPosx -= 10;
-						break;
-					case SDLK_DOWN:
-						playerPosy += 10;
-						break;
-					case SDLK_UP:
-						playerPosy -= 10;
-						break;
-					case SDLK_SPACE:
-						playerPosy -= 10;
-						break;
-					default :
-						break;
-				}
+			switch( event.type ) {
+				case ( SDL_QUIT ):
+					loop = false;
+					break;
+				case SDL_KEYDOWN:
+					switch( event.key.keysym.sym ) {
+											// Move the user
+						case SDLK_RIGHT:
+							playerMoveRight  = true;
+							break;
+						case SDLK_LEFT:
+							playerMoveLeft = true;
+							break;
+						case SDLK_DOWN:
+							playerMoveDown = true;
+							break;
+						case SDLK_UP:
+							playerMoveUp = true;
+							break;
+						/*case SDLK_SPACE:
+							playerMoveRight -= 10;
+							break;*/
+						default :
+							break;
+					}
+					break;
+				case SDL_KEYUP:
+ 	               switch( event.key.keysym.sym ){
+    	                case SDLK_RIGHT:
+							playerMoveRight  = false;
+							break;
+						case SDLK_LEFT:
+							playerMoveLeft = false;
+							break;
+						case SDLK_DOWN:
+							playerMoveDown = false;
+							break;
+						case SDLK_UP:
+							playerMoveUp = false;
+							break;
+    	                default:
+        	                break;
+            	    }
+                	break;
+            
+   	        	default:
+        	        break;
 			}
 		}
  		
  		// Draw everything on the screen
+ 		movePlayer();
 		Render();
  
 		// Add a 16msec delay to make our game run at ~60 fps
@@ -98,6 +127,18 @@ void RunGame()
 	close();
 }
 
+
+void movePlayer()
+{
+	if (playerMoveUp)
+		playerPosy -= 10;
+	if (playerMoveDown)
+		playerPosy += 10;
+	if (playerMoveRight)
+		playerPosx += 10;
+	if (playerMoveLeft)
+		playerPosx -=10;
+}
 
 void Render()
 {
