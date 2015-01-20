@@ -1,21 +1,45 @@
+#include <SDL2/SDL.h>
 
 class Object
-
+{
 public:
-	Object(int x, int y, double traj, int speed);
+	// Constructor
+	Object(int x_pos, int y_pos, double traj, int spd);
 
-	const int getX();
-	const int getY();
-	const double getTrajectory();
-	const int getSpeed();
+	// Returns the object's x-coordinate
+	int getX() const;
+	// Returns the object's y-coordinate
+	int getY() const;
+	// Returns the object's trajectory
+	double getTrajectory() const;
+	// Returns the object's current x-velocity
+	int getXVel() const;
+	// Returns the object's current y-velocity
+	int getYVel() const;
+	// Returns the object's hit radius
+	int getHitRad() const;
 
-	void setX();
-	void setY();
-	void setTrajectory();
-	void setSpeed();
+	// Sets the object's x-coordinate
+	void setX(int newX);
+	// Sets the object's y-coordinate
+	void setY(int newY);
+	// Sets the object's trajectory
+	void setTrajectory(newTraj);
+	// Sets the object's x-velocity
+	void setXVel(newXVel);
+	// Sets the object's y-velocity
+	void setYVel(newYVel);
+	// Sets the object's hit radius
+	void setHitRad(int newHitRad)
+	// Draws the object; blank in this definition
+	void drawSelf(SDL_Renderer* rend);
 
-private:
-	int x;
-	int y;
-	double trajectory;
-	int speed;
+protected:
+	void updatePosition();
+	int x; // Object's current x-coordinate
+	int y; // Object's current x-coordinate
+	double trajectory; // Object's current trajectory
+	int xVel; // Object's current y-velocity
+	int yVel // Object's current x-velocity
+	int hitRad; // Object's hit radius
+}
