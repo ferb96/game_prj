@@ -1,10 +1,8 @@
 
-class Bullet extends Object
 
+class Bullet: public Object
+{
 public:
-	Bullet(int x, int y, double traj, int speed);
-
-	drawBullet();
-
-private:
-
+	Bullet(int x_pos, int y_pos, double traj)
+	void drawSelf(SDL_Renderer* rend, SDL_Surface* surf);
+}
