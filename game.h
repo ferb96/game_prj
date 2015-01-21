@@ -3,9 +3,9 @@
 
 #include <SDL2/SDL.h>
 #include "SDL2/SDL2_gfxPrimitives.h"
-#include "asteroid.h"
-#include "bullet.h"
-#include "player.h"
+//#include "asteroid.h"
+//#include "bullet.h"
+//#include "player.h"
 #include <vector>
 
 class Game
@@ -38,9 +38,10 @@ private:
 	//player actions: array of boolean
 	bool playerAction[TOTAL];
 
-	//declare vector of asteroids here (not sure how to works with pointers yet so just leave it here)
-	//declare vector of bullets here
-	//declare player object here
+	//objects the class is managing
+	vector<asteroid> leAsteroids;
+	vector<bullet> leBullets;
+	player lePlayer;
 
 	//SDL elements
 	SDL_Window* window;
@@ -53,9 +54,12 @@ private:
 	void setupRenderer();
 
 	//processing functions
-	void processInput();
+	void gameLoop();e
+	bool processInput();
+	bool checkCollisions();
 	void moveObjects();
 	void renderObjects();
+	void scoreBoard();
 	void close();
 };
 
