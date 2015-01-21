@@ -136,8 +136,8 @@ void movePlayer()
 {
 	if (playerMoveUp)
 		player1.changeSpeed(2);
-	if (!playerMoveUp)
-		player1.changeSpeed(0);
+	//if (!playerMoveUp)
+		//player1.changeSpeed(-1);
 	//if (playerMoveDown)
 	//	player1.changeSpeed(10);
 	if (playerMoveRight)

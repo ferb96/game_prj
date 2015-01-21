@@ -78,7 +78,7 @@ void Player::drawSelf(SDL_Renderer *rend) {
 	const double RADIAN_CIRCLE = 2 * M_PI;
 	const double RADIAN_QUARTER = M_PI / 2;
 	const double DIST_FROM_CENTER = this->getHitRad() * (4 / 3);
-	double ptraj = trajectoryM + RADIAN_CIRCLE / 3;
+	double ptraj = trajectoryF + RADIAN_CIRCLE / 3;
 
 	double pointTheta = RADIAN_QUARTER - trajectoryF;
 	frontX = (DIST_FROM_CENTER * (cos(pointTheta))) + x;
