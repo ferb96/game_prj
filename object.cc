@@ -1,10 +1,11 @@
 
 
-Object::Object(int x_pos, int y_pos, double traj, int spd) {
+Object::Object(int x_pos, int y_pos, double traj, int xv, int yv) {
 	x = x_pos;
 	y = y_pos;
 	trajectory = traj;
-	speed = spd;
+	xVel = xv;
+	yVel = yv;
 	hitRad = 0;
 }
 
