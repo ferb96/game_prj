@@ -17,9 +17,9 @@
 #            VARIABLES YOU'LL WANT TO CHANGE                   #
 ################################################################
 
-PROGRAM = test
+PROGRAM = letest
 
-CXX_SRCS = object.cc player.cc playerTest.cc bullet.cc
+CXX_SRCS = object.cc player.cc gameState.cc gameStateTest.cc bullet.cc asteroid.cc
 
 CXXLIBS = -lSDL2 -lSDL2_gfx
 

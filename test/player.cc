@@ -107,6 +107,6 @@ void Player::drawSelf(SDL_Renderer *rend) {
 }
 
 Bullet Player::shoot() {
-	Bullet newBullet(frontX, frontY, trajectory);
-	return newBullet;
+	//Bullet newBullet(frontX, frontY, trajectory);
+	//return newBullet;
 }

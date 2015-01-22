@@ -3,10 +3,11 @@
 
 #include <SDL2/SDL.h>
 #include "SDL2/SDL2_gfxPrimitives.h"
-//#include "asteroid.h"
-//#include "bullet.h"
-//#include "player.h"
 #include <vector>
+#include "asteroid.h"
+#include "bullet.h"
+#include "player.h"
+using namespace std;
 
 class Game
 {
@@ -39,8 +40,8 @@ private:
 	bool playerAction[TOTAL];
 
 	//objects the class is managing
-	vector<asteroid> leAsteroids;
-	vector<bullet> leBullets;
+	vector<Asteroid> leAsteroids;
+	vector<Bullet> leBullets;
 	player lePlayer;
 
 	//SDL elements
@@ -54,7 +55,7 @@ private:
 	void setupRenderer();
 
 	//processing functions
-	void gameLoop();e
+	void gameLoop();
 	bool processInput();
 	bool checkCollisions();
 	void moveObjects();

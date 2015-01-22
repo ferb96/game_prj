@@ -8,5 +8,5 @@ Bullet::Bullet(double x_pos, double y_pos, double traj)
 }
 
 void Bullet::drawSelf(SDL_Renderer* rend) {
-	pixelRGBA(rend, x, y, 0xFF, 0xFF, 0xFF, 255);
+	
 }
