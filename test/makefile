@@ -19,7 +19,7 @@
 
 PROGRAM = test
 
-CXX_SRCS = object.cc player.cc playerTest.cc bullet.cc
+CXX_SRCS = object.cc player.cc game.cc gameState.cc gameStateTest.cc bullet.cc
 
 CXXLIBS = -lSDL2 -lSDL2_gfx
 

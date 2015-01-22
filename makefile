@@ -17,9 +17,9 @@
 #            VARIABLES YOU'LL WANT TO CHANGE                   #
 ################################################################
 
-PROGRAM = asteroids
+PROGRAM = letest
 
-CXX_SRCS = main.cc asteroid.cc object.cc player.cc game.cc
+CXX_SRCS = object.cc player.cc gameState.cc gameStateTest.cc bullet.cc asteroid.cc
 
 CXXLIBS = -lSDL2 -lSDL2_gfx
 
