@@ -12,7 +12,7 @@ Bullet::Bullet(double x_pos, double y_pos, double traj, double iVel, double bull
 }
 
 void Bullet::drawSelf(SDL_Renderer* rend) {
-	pixelRGBA(rend, x, y, 0xFF, 0xFF, 0xFF, 255);
+	pixelRGBA(rend, this->x, this->y, 0xFF, 0xFF, 0xFF, 255);
 }
 
 bool Bullet::isExpired() {

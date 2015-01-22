@@ -10,12 +10,12 @@ GameState::GameState(){
 	iteBull = leBullets.begin();
 }
 
-void GameState::addAsteroid(Asteroid roid){
+void GameState::addAsteroid(Asteroid* roid){
 	leAsteroids.push_back(roid);
 	cout << "Adding a new roid" << endl;
 }
 
-void GameState::addBullet(Bullet bull){
+void GameState::addBullet(Bullet* bull){
 	leBullets.push_back(bull);
 	cout << "Adding a new bullet" << endl;
 }
@@ -36,30 +36,20 @@ void GameState::delBullet(){
 		cout << "Error: deleting nonexistent bullet" << endl;
 }
 
-Asteroid GameState::getAsteroid(){
+Asteroid* GameState::getAsteroid(){
 	//if (iteRoid != leAsteroids.end()){
-		Asteroid tmp = *iteRoid;
+		Asteroid* tmp = *iteRoid;
 		iteRoid++;
 		cout << "Getting a roid" << endl;
 		return tmp;
 	//}
 }
 
-Asteroid GameState::getCurrentAsteroid(){
-	cout << "Getting a roid without incrementing" << endl;
-	return *iteRoid;
-}
-
-Bullet GameState::getCurrentBullet(){
-	cout << "Getting a bullet without incrementing" << endl;
-	return *iteBull;
-}
-
-Bullet GameState::getBullet(){
+Bullet* GameState::getBullet(){
 	//if (iteBull != leBullets.end()){
-		Bullet tmp = *iteBull;
+		Bullet* tmp = *iteBull;
 		iteBull++;
-		cout << "Getting a bullet" << endl;
+		//cout << "Getting a bullet" << endl;
 		return tmp;
 	//}
 }

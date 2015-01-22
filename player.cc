@@ -4,6 +4,8 @@
 #include "player.h"
 #include "bullet.h"
 #include "object.h"
+#include <iostream>
+using namespace std;
 
 Player::Player(double x_pos, double y_pos)
 	: Object(x_pos, y_pos, 0.0, 0.0)
@@ -102,22 +104,23 @@ void Player::drawSelf(SDL_Renderer *rend) {
 	
 }
 
-Bullet Player::shoot(double bulletSpeed, double bulletReach) {
+Bullet* Player::shoot(double bulletSpeed, double bulletReach) {
 	// Uses the pythagorean theorem to calculate total player velocity from x/y components
 	const double RADIAN_QUARTER = M_PI / 2;
-	double playerVel = sqrt((velX * velX) + (velY * velY));
-	double playerTheta = RADIAN_QUARTER - (atan(velY / velX));
-	double playerVectX = playerVel * (sin(playerTheta));
-	double playerVectY = playerVel * (cos(playerTheta));
+	//double playerVel = sqrt((velX * velX) + (velY * velY));
+	double playerTheta = M_PI / 2 - atan2(velY,velX);
+	//double playerVectX = playerVel * (sin(playerTheta));
+	//double playerVectY = playerVel * (cos(playerTheta));
 	double bulletTraj = trajectory; // The new bullet's trajectory is the direction the player is facing
-	double bulletTheta = RADIAN_QUARTER - M_PI;
-	double finalX = playerVectX + bulletSpeed * (sin(bulletTheta));
-	double finalY = playerVectY + bulletSpeed * (cos(bulletTheta));
+	double bulletTheta = RADIAN_QUARTER - bulletTraj;
+	double finalX = velX + bulletSpeed * (sin(bulletTheta));
+	double finalY = velY + bulletSpeed * (cos(bulletTheta));
 	double finalSpeed = sqrt((finalX * finalX) + (finalY * finalY));
-	double finalTheta = atan(finalY / finalX);
-	double finalAlpha = RADIAN_QUARTER - finalTheta;
+	double finalAlpha = M_PI / 2 - atan2(finalY,finalX);
+	//double finalAlpha = RADIAN_QUARTER - finalTheta;
 
 	// Creates a bullet object inheriting that velocity
-	Bullet newBullet(frontX, frontY, finalAlpha, finalSpeed, bulletReach);
+	Bullet* newBullet = new Bullet(frontX, frontY, finalAlpha, finalSpeed, bulletReach);
+	cout << "Firing a bullet" << endl << "Velocity: " << finalSpeed << endl << "Trajectory: " << finalAlpha << endl;
 	return newBullet;
 }

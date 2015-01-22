@@ -1,5 +1,7 @@
 #include "object.h"
-
+#include <iostream>
+#include <cmath>
+using namespace std;
 
 Object::Object(double x_pos, double y_pos, double traj, double iVel) {
 
@@ -8,10 +10,10 @@ Object::Object(double x_pos, double y_pos, double traj, double iVel) {
 	trajectory = traj;
 	hitRad = 0;
 	// Breaks the initial velocity into its x and y components
-	const double RADIAN_QUARTER = M_PI / 2;
-	double trajTheta = RADIAN_QUARTER - trajectory;
-	velX = iVel * sin(trajTheta);
-	velY = iVel * cos(trajTheta);
+	// const double RADIAN_QUARTER = M_PI / 2;
+	// double trajTheta = RADIAN_QUARTER - trajectory;
+	velX = iVel * sin(trajectory);
+	velY = iVel * cos(trajectory);
 }
 
 double Object::getX() const {
@@ -62,8 +64,8 @@ void Object::setHitRad(int newHitRad){
 
 void Object::updatePosition(int limitX, int limitY) {
 	// Update position based on velocity
-	x += velX;
-	y += velX;
+	this->x += velX;
+	this->y -= velY;
 
 	// Screen wrap
 	if (x < 0)

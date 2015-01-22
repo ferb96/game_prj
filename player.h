@@ -20,7 +20,7 @@ public:
 	// Draws the player at his/her current position, with trajectory fiven by the data members
 	void drawSelf(SDL_Renderer *rend);
 	// Creates a new bullet object at the position of the player's "front" point, held in the data members 
-	Bullet shoot(double bulletSpeed, double bulletReach);
+	Bullet* shoot(double bulletSpeed, double bulletReach);
 private:
 	double frontX; // The position where the gun is at
 	double frontY;
