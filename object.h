@@ -7,7 +7,7 @@ class Object
 {
 public:
 	// Constructor
-	Object(double x_pos, double y_pos, double traj, double iVelX, double iVelY);
+	Object(double x_pos, double y_pos, double traj, double iVel);
 
 	// Returns the object's x-coordinate
 	double getX() const;
@@ -38,6 +38,8 @@ public:
 	void drawSelf(SDL_Renderer* rend);
 	// Update its own positions
 	void updatePosition(int limitX, int limitY);
+	// Checks for a collision with the given object
+	bool checkCollision(Object incoming);
 
 protected:
 	

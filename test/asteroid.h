@@ -14,7 +14,6 @@ public:
 	void setLevel(double newLevel);
 
 	void drawSelf(SDL_Renderer *rend);
-
 private:
 	int level;
 };

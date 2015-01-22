@@ -41,7 +41,6 @@ int main( int argc, char* args[] )
 		return -1;
  
  	player1.setDecel(0.03);
-	player1.setMaxVel(10);
 	// Run the game
 	RunGame();
 

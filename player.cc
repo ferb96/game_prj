@@ -5,8 +5,8 @@
 #include "bullet.h"
 #include "object.h"
 
-Player::Player(int x_pos, int y_pos)
-	: Object(x_pos, y_pos, 0.0, 0.0, 0.0)
+Player::Player(double x_pos, double y_pos)
+	: Object(x_pos, y_pos, 0.0, 0.0)
 {
 	setHitRad(22);
 	accelMag = 0;
@@ -32,10 +32,6 @@ void Player::setDecel(double decel) {
 	decelMag = decel;
 }
 
-void Player::setMaxVel(double vel) {
-	maxVel = vel;
-}
-
 void Player::updatePosition(int limitX, int limitY){
 	// Player acceleration
 	double accelX = accelMag * sin(trajectory);
@@ -51,7 +47,7 @@ void Player::updatePosition(int limitX, int limitY){
 		decelTraj = velTraj + M_PI;
 		decelAmt = sqrt(velX*velX + velY*velY);
 	}
-	// If the player is not accelerating, start to decelerate, decrease decelAmt overtime till it reaches zero
+	// If the player is not accelerating, start to decelerate, decrease decelAmt over time till it reaches zero
 	if (accelMag == 0 && decelAmt > 0){
 		decelX = decelMag * sin(decelTraj);
 		decelY = decelMag * cos(decelTraj);
@@ -106,7 +102,22 @@ void Player::drawSelf(SDL_Renderer *rend) {
 	
 }
 
-Bullet Player::shoot() {
-	//Bullet newBullet(frontX, frontY, trajectory);
-	//return newBullet;
+Bullet Player::shoot(double bulletSpeed, double bulletReach) {
+	// Uses the pythagorean theorem to calculate total player velocity from x/y components
+	const double RADIAN_QUARTER = M_PI / 2;
+	double playerVel = sqrt((velX * velX) + (velY * velY));
+	double playerTheta = RADIAN_QUARTER - (atan(velY / velX));
+	double playerVectX = playerVel * (sin(playerTheta));
+	double playerVectY = playerVel * (cos(playerTheta));
+	double bulletTraj = trajectory; // The new bullet's trajectory is the direction the player is facing
+	double bulletTheta = RADIAN_QUARTER - M_PI;
+	double finalX = playerVectX + bulletSpeed * (sin(bulletTheta));
+	double finalY = playerVectY + bulletSpeed * (cos(bulletTheta));
+	double finalSpeed = sqrt((finalX * finalX) + (finalY * finalY));
+	double finalTheta = atan(finalY / finalX);
+	double finalAlpha = RADIAN_QUARTER - finalTheta;
+
+	// Creates a bullet object inheriting that velocity
+	Bullet newBullet(frontX, frontY, finalAlpha, finalSpeed, bulletReach);
+	return newBullet;
 }
