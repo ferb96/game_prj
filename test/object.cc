@@ -1,16 +1,13 @@
 #include "object.h"
 
 
-Object::Object(double x_pos, double y_pos, double trajM, double iVel) {
+Object::Object(double x_pos, double y_pos, double traj, double iVelX, double iVelY) {
 
 	x = x_pos;
 	y = y_pos;
-	trajectoryM = trajM;
-	vel = iVel;
-	const double RADIAN_QUARTER = M_PI / 2;
-	double trajTheta = RADIAN_QUARTER - trajectoryM;
-	movX = cos(trajTheta);
-	movY = sin(trajTheta);
+	trajectory = traj;
+	velX = iVelX;
+	velY = iVelY;
 	hitRad = 0;
 }
 
@@ -20,20 +17,16 @@ double Object::getX() const {
 double Object::getY() const {
 	return y;
 }
-double Object::getTrajectoryM() const {
-	return trajectoryM;
+double Object::getTrajectory() const {
+	return trajectory;
 }
 
-double Object::getVel() const {
-	return vel;
+double Object::getVelX() const {
+	return velX;
 }
 
-double Object::getMovX() const {
-	return movX;
-}
-
-double Object::getMovY() const {
-	return movY;
+double Object::getVelY() const {
+	return velY;
 }
 
 int Object::getHitRad() const {
@@ -48,33 +41,36 @@ void Object::setY(double newY) {
 	y = newY;
 }
 
-void Object::setTrajectoryM(double newTraj) {
-	trajectoryM = newTraj;
+void Object::setTrajectory(double newTraj) {
+	trajectory = newTraj;
 }
 
-void Object::setVel(double newVel){
-	vel = newVel; 
+void Object::setVelX(double newVel){
+	velX = newVel; 
 }
 
-void Object::setMovX(double newMovX) {
-	movX = newMovX;
-}
-
-void Object::setMovY(double newMovY) {
-	movY = newMovY;
+void Object::setVelY(double newVel){
+	velY = newVel; 
 }
 
 void Object::setHitRad(int newHitRad){
 	hitRad = newHitRad;
 }
 
-void Object::updatePosition() {
-	//const double RADIAN_QUARTER = M_PI / 2;
-	//double trajTheta = RADIAN_QUARTER - trajectoryM;
-	//movX = cos(trajTheta);
-	//movY = sin(trajTheta);
-	x += vel * movX;
-	y += vel * movY;
+void Object::updatePosition(int limitX, int limitY) {
+	// Update position based on velocity
+	x += velX;
+	y += velX;
+
+	// Screen wrap
+	if (x < 0)
+		x = limitX;
+	if (x > limitX)
+		x = 0;
+	if (y < 0)
+		y = limitY;
+	if (y > limitY)
+		y = 0;
 }
 
 
