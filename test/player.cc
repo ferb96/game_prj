@@ -6,7 +6,7 @@
 #include "object.h"
 
 Player::Player(int x_pos, int y_pos)
-	: Object(x_pos, y_pos, 0.0, 0.0, 0.0)
+	: Object(x_pos, y_pos, 0.0, 0.0)
 {
 	setHitRad(22);
 	accelMag = 0;
@@ -51,7 +51,7 @@ void Player::updatePosition(int limitX, int limitY){
 		decelTraj = velTraj + M_PI;
 		decelAmt = sqrt(velX*velX + velY*velY);
 	}
-	// If the player is not accelerating, start to decelerate, decrease decelAmt overtime till it reaches zero
+	// If the player is not accelerating, start to decelerate, decrease decelAmt over time till it reaches zero
 	if (accelMag == 0 && decelAmt > 0){
 		decelX = decelMag * sin(decelTraj);
 		decelY = decelMag * cos(decelTraj);
@@ -107,6 +107,11 @@ void Player::drawSelf(SDL_Renderer *rend) {
 }
 
 Bullet Player::shoot() {
-	Bullet newBullet(frontX, frontY, trajectory);
+	// Uses the pythagorean theorem to calculate total player velocity from x/y components
+	playerVel = sqrt((velX * velX) + (velY * velY));
+	// Creates a bullet object inheriting that velocity
+	Bullet newBullet(frontX, frontY, trajectory, playerVel);
 	return newBullet;
 }
+
+

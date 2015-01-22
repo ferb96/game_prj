@@ -2,9 +2,9 @@
 #include <SDL2/SDL.h>
 #include "SDL2/SDL2_gfxPrimitives.h"
 #include <iostream>
-
-
-
+#include "asteroid.h"
+#include <vector>
+#include "bullet.h"
 
 // Size of the window
 int sizeX = 800;
@@ -15,6 +15,8 @@ SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
  
 Player player1(sizeX/2, sizeY/2);
+
+Asteroid ast1(sizeX/4, sizeY/4, 0.0, .5, 6, 60, 0);
 // Declaring functions, implement them afterwards
 bool InitEverything();
 bool InitSDL();
@@ -41,6 +43,7 @@ int main( int argc, char* args[] )
 		return -1;
  
  	player1.setDecel(0.03);
+	player1.setMaxVel(10);
 	// Run the game
 	RunGame();
 
@@ -112,6 +115,7 @@ void RunGame()
  		// Draw everything on the screen
  		movePlayer();
  		player1.updatePosition(sizeX, sizeY);
+ 		ast1.updatePosition(sizeX, sizeY);
 		Render();
  
 		// Add a 16msec delay to make our game run at ~60 fps
@@ -148,6 +152,8 @@ void Render()
 
 	// Render a box, aka a rectangle, aka out "Player"
 	player1.drawSelf( renderer );
+
+	ast1.drawSelf( renderer );
  
 	// Render the changes above to the window
 	SDL_RenderPresent( renderer );

@@ -1,14 +1,17 @@
 #include "object.h"
 
 
-Object::Object(double x_pos, double y_pos, double traj, double iVelX, double iVelY) {
+Object::Object(double x_pos, double y_pos, double traj, double iVel) {
 
 	x = x_pos;
 	y = y_pos;
 	trajectory = traj;
-	velX = iVelX;
-	velY = iVelY;
 	hitRad = 0;
+	// Breaks the initial velocity into its x and y components
+	const double RADIAN_QUARTER = M_PI / 2;
+	double trajTheta = RADIAN_QUARTER - trajectory;
+	velX = iVel * sin(trajTheta);
+	velY = iVel * cos(trajTheta);
 }
 
 double Object::getX() const {
@@ -73,4 +76,15 @@ void Object::updatePosition(int limitX, int limitY) {
 		y = 0;
 }
 
+bool Object::checkCollision(Object incoming) {
+	double xDist = abs(x - incoming.getX()); // Calculates the difference in x values
+	double yDist = abs(y - incoming.getY()); // Calculates the difference in y values
+	/* Finds the total linear distance between the first object and the 
+	second. Pythagorean theorem. c = sqrt((a*a) + (b*b)) */
+	double distance = sqrt((xDist * xDist) + (yDist * yDist)); 
+	/* The boolean "collide" is initialized true if the objects' centerpoints are 
+	close enough to warrant a collision. */
+	bool collide = (distance <= hitRad + incoming.getHitRad());
+	return collide;
+}
 
