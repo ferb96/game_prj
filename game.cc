@@ -112,3 +112,85 @@ void Game::close()
 
 	return;
 }
+
+void Game::runGame(){
+	gameLoop();
+	scoreBoard();
+	close();
+}
+
+void Game::gameLoop(){
+	bool loop = true;
+	while (loop){
+		if ( !processInput() )
+			loop = false;
+		if ( !checkCollisions() )
+			loop = false;
+		moveObjects();
+		renderObjects();
+	}
+}
+
+bool Game::processInput(){
+	bool quit = false;
+	SDL_Event event;
+	while ( SDL_PollEvent( &event ) ) {
+		switch( event.type ) {
+			case SDL_QUIT:
+				quit = true;
+				break;
+
+			case SDL_KEYDOWN:
+				switch( event.key.keysym.sym ) {
+					case SDLK_RIGHT:
+						playerAction[MOVING_RIGHT] = true;
+						break;
+					case SDLK_LEFT:
+						playerAction[MOVING_LEFT] = true;
+						break;
+					case SDLK_DOWN:
+						playerAction[MOVING_DOWN] = true;
+						break;
+					case SDLK_UP:
+						playerAction[MOVING_UP] = true;
+						break;
+					case SDLK_SPACE:
+						playerAction[SHOOTING] = true;
+						break;
+					default :
+						break;
+				}
+				break;
+
+			case SDL_KEYUP:
+	            switch( event.key.keysym.sym ){
+					case SDLK_RIGHT:
+						playerAction[MOVING_RIGHT] = false;
+						break;
+					case SDLK_LEFT:
+						playerAction[MOVING_LEFT] = false;
+						break;
+					case SDLK_DOWN:
+						playerAction[MOVING_DOWN] = false;
+						break;
+					case SDLK_UP:
+						playerAction[MOVING_UP] = false;
+						break;
+					case SDLK_SPACE:
+						playerAction[SHOOTING] = false;
+						break;
+					default :
+						break;
+	    	    }
+	        	break;
+
+	        default:
+		    	break;
+		}
+	}
+	return quit;
+}
+
+bool Game::checkCollisions(){
+	
+}

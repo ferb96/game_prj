@@ -121,5 +121,3 @@ Bullet Player::shoot(double bulletSpeed, double bulletReach) {
 	Bullet newBullet(frontX, frontY, finalAlpha, finalSpeed, bulletReach);
 	return newBullet;
 }
-
-

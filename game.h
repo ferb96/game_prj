@@ -1,25 +1,67 @@
-Class Game
+#ifndef GAME_H
+#define GAME_H
+
+#include <SDL2/SDL.h>
+#include "SDL2/SDL2_gfxPrimitives.h"
+#include <vector>
+#include "asteroid.h"
+#include "bullet.h"
+#include "player.h"
+using namespace std;
+
+class Game
 {
 public:
-	Game(int winSizeX, int WinSizeY);
+	Game();
 	bool init();
 	void runGame(); 
+
 private:
-	//declare vector of asteroids here (not sure how to works with pointers yet so just leave it here)
-	//declare vector of bullets here
-	//declare player object here
+	//enumerators
+	enum playerStates { 
+		MOVING_UP,
+		MOVING_DOWN,
+		MOVING_LEFT,
+		MOVING_RIGHT,
+		SHOOTING,
+		TOTAL
+	};
+
+	//gameplay-related values
+	int asteroidSplitNumber;
+	int delayBetweenBullets;
+	int playerMoveSpeed;
+	int asteroidMoveSpeed;
+	int bulletMoveSpeed;
+	int winSizeX;
+	int winSizeY;
+
+	//player actions: array of boolean
+	bool playerAction[TOTAL];
+
+	//objects the class is managing
+	vector<Asteroid> leAsteroids;
+	vector<Bullet> leBullets;
+	player lePlayer;
+
+	//SDL elements
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 
 	//init functions
-	bool InitSDL();
+	bool initSDL();
 	bool createWindow();
 	bool createRenderer();
-	bool setup Renderer();
+	void setupRenderer();
 
 	//processing functions
-	void processInput();
+	void gameLoop();
+	bool processInput();
+	bool checkCollisions();
 	void moveObjects();
 	void renderObjects();
+	void scoreBoard();
 	void close();
-}
+};
+
+#endif /* GAME_H */
