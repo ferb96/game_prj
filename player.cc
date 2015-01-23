@@ -107,17 +107,11 @@ void Player::drawSelf(SDL_Renderer *rend) {
 Bullet* Player::shoot(double bulletSpeed, double bulletReach) {
 	// Uses the pythagorean theorem to calculate total player velocity from x/y components
 	const double RADIAN_QUARTER = M_PI / 2;
-	//double playerVel = sqrt((velX * velX) + (velY * velY));
-	double playerTheta = M_PI / 2 - atan2(velY,velX);
-	//double playerVectX = playerVel * (sin(playerTheta));
-	//double playerVectY = playerVel * (cos(playerTheta));
 	double bulletTraj = trajectory; // The new bullet's trajectory is the direction the player is facing
-	double bulletTheta = RADIAN_QUARTER - bulletTraj;
-	double finalX = velX + bulletSpeed * (sin(bulletTheta));
-	double finalY = velY + bulletSpeed * (cos(bulletTheta));
+	double finalX = velX + bulletSpeed * (sin(bulletTraj));
+	double finalY = velY + bulletSpeed * (cos(bulletTraj));
 	double finalSpeed = sqrt((finalX * finalX) + (finalY * finalY));
-	double finalAlpha = M_PI / 2 - atan2(finalY,finalX);
-	//double finalAlpha = RADIAN_QUARTER - finalTheta;
+	double finalAlpha = (M_PI / 2) - atan2(finalY,finalX);
 
 	// Creates a bullet object inheriting that velocity
 	Bullet* newBullet = new Bullet(frontX, frontY, finalAlpha, finalSpeed, bulletReach);
