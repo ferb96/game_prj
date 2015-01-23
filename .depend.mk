@@ -1,7 +1,7 @@
 object.o: object.cc object.h
 player.o: player.cc player.h object.h bullet.h
-collisionTest.o: collisionTest.cc player.h object.h bullet.h gameState.h \
-  asteroid.h
+main.o: main.cc game.h asteroid.h object.h bullet.h player.h gameState.h
+game.o: game.cc game.h asteroid.h object.h bullet.h player.h gameState.h
 gameState.o: gameState.cc gameState.h asteroid.h object.h player.h \
   bullet.h
 bullet.o: bullet.cc bullet.h object.h

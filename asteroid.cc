@@ -22,5 +22,58 @@ void Asteroid::setLevel(double newLevel) {
 }
 
 void Asteroid::drawSelf(SDL_Renderer *rend) {
-	circleRGBA(rend, x, y, hitRad, 0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				(x - hitRad), (y - (hitRad / 5)),
+				(x - hitRad), (y + (hitRad / 5)),
+				0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				(x - hitRad), (y + (hitRad / 5)),
+				(x - ((2 * hitRad) / 5)), (y + (hitRad / 5)),
+				0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				(x - ((2 * hitRad) / 5)), (y + (hitRad / 5)),
+				(x - ((2 * hitRad) / 5)), (y + ((3 * hitRad)/ 5)),
+				0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				(x - ((2 * hitRad) / 5)), (y + ((3 * hitRad)/ 5)),
+				x, y + hitRad,
+				0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				x, y + hitRad,
+				(x + ((2 * hitRad) / 5)), y + hitRad,
+				0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				(x + ((2 * hitRad) / 5)), y + hitRad,
+				(x + ((3 * hitRad) / 5)), (y + ((4 * hitRad)/ 5)),
+				0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				(x + ((3 * hitRad) / 5)), (y + ((4 * hitRad)/ 5)),
+				(x + ((3 * hitRad) / 5)), (y + ((2 * hitRad)/ 5)),
+				0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				(x + ((3 * hitRad) / 5)), (y + ((2 * hitRad)/ 5)),
+				(x + hitRad), y,
+				0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				(x + hitRad), y,
+				(x + ((4 * hitRad) / 5)), (y - ((3 * hitRad)/ 5)),
+				0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				(x + ((4 * hitRad) / 5)), (y - ((3 * hitRad)/ 5)),
+				(x + (hitRad / 5)), (y - hitRad),
+				0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				(x + (hitRad / 5)), (y - hitRad),
+				(x - ((2 * hitRad) / 5)), (y - hitRad),
+				0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				(x - ((2 * hitRad) / 5)), (y - hitRad),
+				(x - ((4 * hitRad) / 5)), (y - ((4 * hitRad)/ 5)),
+				0xFF, 0xFF, 0xFF, 255);
+	lineRGBA(rend,
+				(x - ((4 * hitRad) / 5)), (y - ((4 * hitRad)/ 5)),
+				(x - hitRad), (y - (hitRad / 5)),
+				0xFF, 0xFF, 0xFF, 255);
+	
+	//circleRGBA(rend, x, y, hitRad, 0xFF, 0xFF, 0xFF, 255);
 }
