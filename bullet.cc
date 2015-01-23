@@ -16,8 +16,8 @@ void Bullet::drawSelf(SDL_Renderer* rend) {
 }
 
 bool Bullet::isExpired() {
-	double xDist = abs(x - firedX); // Calculates the difference in x values
-	double yDist = abs(y - firedY); // Calculates the difference in y values
+	double xDist = x - firedX; // Calculates the difference in x values
+	double yDist = y - firedY; // Calculates the difference in y values
 	/* Finds the total linear distance between the bullet object and its 
 	point of origin. Pythagorean theorem: c = sqrt((a*a) + (b*b)) */
 	double distance = sqrt((xDist * xDist) + (yDist * yDist)); 

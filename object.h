@@ -39,7 +39,7 @@ public:
 	// Update its own positions
 	void updatePosition(int limitX, int limitY);
 	// Checks for a collision with the given object
-	bool checkCollision(Object incoming);
+	bool checkCollision(Object* incoming);
 
 protected:
 	
