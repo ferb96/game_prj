@@ -109,9 +109,26 @@ void Player::drawSelf(SDL_Renderer *rend) {
 				int(baseMidX), int(baseMidY),
 				0xFF, 0xFF, 0xFF, 255);
 
-	//if (exhaust) {
-
-	//}
+	if (accelMag > 0) {
+		double leftMidX = ((baseMidX + leftX) / 2.0);
+		double leftMidY = ((baseMidY + leftY) / 2.0);
+		double rightMidX = ((baseMidX + rightX) / 2.0);
+		double rightMidY = ((baseMidY + rightY) / 2.0);
+		double exhaustLen = sqrt(((leftX - rightX) * (leftX - rightX)) + ((leftY - rightY) * (leftY - rightY))) / 3;
+		double centerToBase = sqrt(((x - baseMidX) * (x - baseMidX)) + ((y - baseMidY) * (y - baseMidY)));
+		double totalDist = exhaustLen + centerToBase;
+		double exhaustTraj = (2 * M_PI) - trajectory;
+		/*double exhaustWid = sqrt(((leftX - rightX) * (leftX - rightX)) + ((leftY - rightY) * (leftY - rightY))) / 4;
+		double hypLen = sqrt((exhaustWid * exhaustWid) + (exhaustLen * exhaustLen));
+		double exhaustTheta = (M_PI / 2) - atan(exhaustLen / exhaustWid); */
+		double exhaustX = totalDist * (sin(exhaustTraj)) + x;
+		double exhaustY = totalDist * (cos(exhaustTraj)) + y;
+		trigonRGBA(rend,
+               	int(leftMidX + .5), int(leftMidY + .5), // x y of first vertex
+                int(rightMidX + .5), int(rightMidY + .5), // x y of second vertex
+                int(exhaustX + .5), int(exhaustY + .5), // x y of third vertex
+                0xFF, 0xFF, 0xFF, 255); // R G B Alpha values, white
+	}
 	
 }
 

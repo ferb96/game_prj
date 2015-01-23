@@ -7,13 +7,12 @@
 class Bullet : public Object
 {
 public:
-	Bullet(double x_pos, double y_pos, double traj, double iVel, double bulletReach);
+	Bullet(double x_pos, double y_pos, double traj, double iVel, int bulletLife);
 	void drawSelf(SDL_Renderer* rend);
 	bool isExpired();
 private:
-	int firedX;
-	int firedY;
-	double reach;
+	int spawnTime;
+	int bulletLifespan;
 };
 
 #endif /* BULLET_H */
