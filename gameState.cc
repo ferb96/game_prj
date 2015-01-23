@@ -40,7 +40,7 @@ Asteroid* GameState::getAsteroid(){
 	//if (iteRoid != leAsteroids.end()){
 		Asteroid* tmp = *iteRoid;
 		iteRoid++;
-		cout << "Getting a roid" << endl;
+		//cout << "Getting a roid" << endl;
 		return tmp;
 	//}
 }

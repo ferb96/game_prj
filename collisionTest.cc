@@ -12,7 +12,7 @@ int sizeX = 800;
 int sizeY = 600;
 
 const double BULLET_SPEED = 10;
-const double BULLET_REACH = 300;
+const int BULLET_LIFE = 1000;
 
 // This will be our main window and renderer we used throughout the program
 SDL_Window* window = NULL;
@@ -89,7 +89,7 @@ void RunGame()
 						case SDLK_SPACE:
 							playerShoot = true;
 							//Bullet* bull = player1.shoot(BULLET_SPEED, BULLET_REACH);
-							game.addBullet(player1.shoot(BULLET_SPEED, BULLET_REACH));
+							game.addBullet(player1.shoot(BULLET_SPEED, BULLET_LIFE));
 							break;
 						default :
 							break;
