@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include "SDL2/SDL2_gfxPrimitives.h"
 #include <vector>
+#include <cmath>
 #include <iostream>
 using namespace std;
 
@@ -13,18 +14,18 @@ const int ASTEROID_SPLIT_NUMBER = 2;
 const int DELAY_BETWEEN_BULLETS = 250;
 const int PLAYER_MOVE_SPEED = 8;
 const int ASTEROID_MOVE_SPEED = 9;
-const int BULLET_MOVE_SPEED = 20;
+const int BULLET_MOVE_SPEED = 15;
 
 /*
  * Implementing the functions in the Game class
  */
 void Game::runGame(){
 	Player* lePlayer = new Player(winSizeX/2, winSizeY/2);
-	lePlayer->setDecel(.05);
+	lePlayer->setDecel(.02);
 	gamemgr.addPlayer(lePlayer);
-	Asteroid* ast1 = new Asteroid(winSizeX/4, winSizeY/4, 0.0, 2.0, 60, 0);
+	Asteroid* ast1 = new Asteroid(winSizeX/4, winSizeY/4, 0.0, 2.0, 50, 0);
 	gamemgr.addAsteroid(ast1);
-	Asteroid* ast2 = new Asteroid(700, 500, 2.0, 1.0, 40, 0);
+	Asteroid* ast2 = new Asteroid(700, 500, 2.0, 1.0, 50, 0);
 	gamemgr.addAsteroid(ast2);
 	Asteroid* ast3 = new Asteroid(100, 400, 3.0, 1.5, 50, 0);
 	gamemgr.addAsteroid(ast3);
@@ -61,7 +62,7 @@ bool Game::checkCollisions(){
 			Bullet* bull = gamemgr.getBullet();
 			//check for collision between roid and bull
 			if ( roid->checkCollision(bull) ){
-				gamemgr.delAsteroid();
+				splitAsteroid(roid);
 				gamemgr.delBullet();
 			}
 		}
@@ -72,7 +73,7 @@ bool Game::checkCollisions(){
 void Game::moveObjects(){
 	Player* lePlayer = gamemgr.getPlayer();
 	if (playerAction[MOVING_UP])
-		lePlayer->setAccel(.15);
+		lePlayer->setAccel(.08);
 	if (!playerAction[MOVING_UP])
 		lePlayer->setAccel(0);
 	if (playerAction[MOVING_RIGHT])
@@ -82,7 +83,7 @@ void Game::moveObjects(){
 	if (playerAction[SHOOTING])
 		if (SDL_GetTicks() - lastShot > delayBetweenBullets){
 			lastShot = SDL_GetTicks();
-			gamemgr.addBullet(lePlayer->shoot(bulletMoveSpeed, 400.0));
+			gamemgr.addBullet(lePlayer->shoot(bulletMoveSpeed, 500));
 		}
 	if (!playerAction[SHOOTING])
 		lastShot = 0;
@@ -101,6 +102,17 @@ void Game::moveObjects(){
 		if ( bull->isExpired() )
 			gamemgr.delBullet();
 	}
+}
+
+void Game::splitAsteroid(Asteroid* roid){
+	gamemgr.delAsteroid();
+	if (roid->getLevel() < 2){
+		Asteroid* newroid1 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() + M_PI/6, 2.0, 50, roid->getLevel()+1);
+		Asteroid* newroid2 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() - M_PI/6, 2.0, 50, roid->getLevel()+1);
+		gamemgr.addAsteroid(newroid1);
+		gamemgr.addAsteroid(newroid2);
+	}
+	gamemgr.resetIteRoid();
 }
 
 void Game::renderObjects(){

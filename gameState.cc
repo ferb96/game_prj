@@ -12,17 +12,14 @@ GameState::GameState(){
 
 void GameState::addPlayer(Player* playa){
 	lePlayer = playa;
-	cout << "Adding the player" << endl;
 }
 
 void GameState::addAsteroid(Asteroid* roid){
 	leAsteroids.push_back(roid);
-	cout << "Adding a new roid" << endl;
 }
 
 void GameState::addBullet(Bullet* bull){
 	leBullets.push_back(bull);
-	cout << "Adding a new bullet" << endl;
 }
 
 void GameState::delAsteroid(){
@@ -46,21 +43,15 @@ Player* GameState::getPlayer(){
 }
 
 Asteroid* GameState::getAsteroid(){
-	//if (iteRoid != leAsteroids.end()){
-		Asteroid* tmp = *iteRoid;
-		iteRoid++;
-		//cout << "Getting a roid" << endl;
-		return tmp;
-	//}
+	Asteroid* tmp = *iteRoid;
+	iteRoid++;
+	return tmp;
 }
 
 Bullet* GameState::getBullet(){
-	//if (iteBull != leBullets.end()){
-		Bullet* tmp = *iteBull;
-		iteBull++;
-		//cout << "Getting a bullet" << endl;
-		return tmp;
-	//}
+	Bullet* tmp = *iteBull;
+	iteBull++;
+	return tmp;
 }
 
 bool GameState::noMoreAsteroid(){
@@ -81,4 +72,12 @@ void GameState::resetIteRoid(){
 
 void GameState::resetIteBullet(){
 	iteBull = this->leBullets.begin();
+}
+
+vector<Asteroid*>::iterator GameState::getIteRoid(){
+	return iteRoid;
+}
+
+void GameState::setIteRoid(vector<Asteroid*>::iterator newIte){
+	iteRoid = newIte;
 }

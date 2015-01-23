@@ -58,6 +58,7 @@ private:
 	void gameLoop();
 	bool processInput();
 	bool checkCollisions();
+	void splitAsteroid(Asteroid* roid);
 	void moveObjects();
 	void renderObjects();
 	//void scoreBoard();

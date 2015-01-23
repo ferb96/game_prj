@@ -26,6 +26,9 @@ public:
 	bool noMoreBullet();
 	void resetIteRoid();
 	void resetIteBullet();
+
+	vector<Asteroid*>::iterator getIteRoid();
+	void setIteRoid(vector<Asteroid*>::iterator newIte);
 private:
 	vector<Asteroid*>::iterator iteRoid; // Asteroid iterator, pointing to current Asteroid object
 	vector<Bullet*>::iterator iteBull; // Bullet iterator, pointing to current Bullet object

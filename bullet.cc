@@ -11,7 +11,7 @@ Bullet::Bullet(double x_pos, double y_pos, double traj, double iVel, int bulletL
 }
 
 void Bullet::drawSelf(SDL_Renderer* rend) {
-	pixelRGBA(rend, this->x, this->y, 0xFF, 0xFF, 0xFF, 255);
+	filledCircleRGBA(rend, x, y, 1, 0xFF, 0xFF, 0xFF, 255);
 }
 
 bool Bullet::isExpired() {
