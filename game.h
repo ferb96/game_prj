@@ -33,7 +33,8 @@ private:
 
 	//gameplay-related values
 	int asteroidSplitNumber;
-	int delayBetweenBullets;
+	unsigned int lastShot;
+	unsigned int delayBetweenBullets;
 	int playerMoveSpeed;
 	int asteroidMoveSpeed;
 	int bulletMoveSpeed;

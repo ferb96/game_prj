@@ -10,7 +10,7 @@ using namespace std;
 const int WINDOW_SIZE_X = 800;
 const int WINDOW_SIZE_Y = 600;
 const int ASTEROID_SPLIT_NUMBER = 2;
-const int DELAY_BETWEEN_BULLETS = 500;
+const int DELAY_BETWEEN_BULLETS = 250;
 const int PLAYER_MOVE_SPEED = 8;
 const int ASTEROID_MOVE_SPEED = 9;
 const int BULLET_MOVE_SPEED = 20;
@@ -22,6 +22,13 @@ void Game::runGame(){
 	Player* lePlayer = new Player(winSizeX/2, winSizeY/2);
 	lePlayer->setDecel(.05);
 	gamemgr.addPlayer(lePlayer);
+	Asteroid* ast1 = new Asteroid(winSizeX/4, winSizeY/4, 0.0, 2.0, 60, 0);
+	gamemgr.addAsteroid(ast1);
+	Asteroid* ast2 = new Asteroid(700, 500, 2.0, 1.0, 40, 0);
+	gamemgr.addAsteroid(ast2);
+	Asteroid* ast3 = new Asteroid(100, 400, 3.0, 1.5, 50, 0);
+	gamemgr.addAsteroid(ast3);
+
 	gameLoop();
 	//scoreBoard();
 	close();
@@ -47,11 +54,16 @@ bool Game::checkCollisions(){
 	while ( !gamemgr.noMoreAsteroid() ){
 		Asteroid* roid = gamemgr.getAsteroid();
 		//check for collision between player and roid
+		if ( lePlayer->checkCollision(roid) )
+			playerAlive = false;
 		gamemgr.resetIteBullet();
 		while ( !gamemgr.noMoreBullet() ){
 			Bullet* bull = gamemgr.getBullet();
 			//check for collision between roid and bull
-			//check for bullet expiration
+			if ( roid->checkCollision(bull) ){
+				gamemgr.delAsteroid();
+				gamemgr.delBullet();
+			}
 		}
 	}
 	return playerAlive;
@@ -67,7 +79,28 @@ void Game::moveObjects(){
 		lePlayer->changeTrajectory(.07);
 	if (playerAction[MOVING_LEFT])
 		lePlayer->changeTrajectory(-.07);
+	if (playerAction[SHOOTING])
+		if (SDL_GetTicks() - lastShot > delayBetweenBullets){
+			lastShot = SDL_GetTicks();
+			gamemgr.addBullet(lePlayer->shoot(bulletMoveSpeed, 400.0));
+		}
+	if (!playerAction[SHOOTING])
+		lastShot = 0;
+
 	lePlayer->updatePosition(winSizeX, winSizeY);
+	gamemgr.resetIteRoid();
+	while ( !gamemgr.noMoreAsteroid() ){
+		Asteroid* roid = gamemgr.getAsteroid();
+		roid->updatePosition(winSizeX, winSizeY);
+	}
+	gamemgr.resetIteBullet();
+	while ( !gamemgr.noMoreBullet() ){
+		Bullet* bull = gamemgr.getBullet();
+		bull->updatePosition(winSizeX, winSizeY);
+		//check for bullet expiration
+		if ( bull->isExpired() )
+			gamemgr.delBullet();
+	}
 }
 
 void Game::renderObjects(){
@@ -83,6 +116,17 @@ void Game::renderObjects(){
 	// Render the player
 	Player* lePlayer = gamemgr.getPlayer();
 	lePlayer->drawSelf( renderer );
+
+	gamemgr.resetIteRoid();
+	while ( !gamemgr.noMoreAsteroid() ){
+		Asteroid* roid = gamemgr.getAsteroid();
+		roid->drawSelf(renderer);
+	}
+	gamemgr.resetIteBullet();
+	while ( !gamemgr.noMoreBullet() ){
+		Bullet* bull = gamemgr.getBullet();
+		bull->drawSelf(renderer);
+	}
  
 	// Render the changes above to the window
 	SDL_RenderPresent( renderer );
