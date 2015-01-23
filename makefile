@@ -19,7 +19,7 @@
 
 PROGRAM = letest
 
-CXX_SRCS = object.cc player.cc bulletTest.cc gameState.cc bullet.cc asteroid.cc
+CXX_SRCS = object.cc player.cc main.cc game.cc gameState.cc bullet.cc asteroid.cc
 
 CXXLIBS = -lSDL2 -lSDL2_gfx
 

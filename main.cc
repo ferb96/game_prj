@@ -4,10 +4,11 @@
 #include "game.h"
 
 // THE GLORIOUS MAIN FUNCTION
-int main()
+int main(){
 	Game theGame;
-	if ( !theGame.init() );
+	if ( !theGame.init() )
 		return -1;
 
-	theGame.runGame()
+	theGame.runGame();
 	return 0;
+}

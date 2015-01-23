@@ -7,6 +7,7 @@
 #include "asteroid.h"
 #include "bullet.h"
 #include "player.h"
+#include "gameState.h"
 using namespace std;
 
 class Game
@@ -27,6 +28,9 @@ private:
 		TOTAL
 	};
 
+	//the GameState
+	GameState gamemgr;
+
 	//gameplay-related values
 	int asteroidSplitNumber;
 	int delayBetweenBullets;
@@ -38,11 +42,6 @@ private:
 
 	//player actions: array of boolean
 	bool playerAction[TOTAL];
-
-	//objects the class is managing
-	vector<Asteroid> leAsteroids;
-	vector<Bullet> leBullets;
-	player lePlayer;
 
 	//SDL elements
 	SDL_Window* window;
@@ -60,7 +59,7 @@ private:
 	bool checkCollisions();
 	void moveObjects();
 	void renderObjects();
-	void scoreBoard();
+	//void scoreBoard();
 	void close();
 };
 

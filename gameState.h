@@ -11,10 +11,12 @@ class GameState
 {
 public:
 	GameState();
+	void addPlayer(Player* playa);
 	void addAsteroid(Asteroid* roid);
 	void addBullet(Bullet* bull);
 	void delAsteroid();
 	void delBullet();
+	Player* getPlayer();
 	Asteroid* getAsteroid();
 	Asteroid* getCurrentAsteroid();
 	Bullet* getBullet();
@@ -29,7 +31,7 @@ private:
 	vector<Bullet*>::iterator iteBull; // Bullet iterator, pointing to current Bullet object
 	vector<Asteroid*> leAsteroids;
 	vector<Bullet*> leBullets;
-	//Player lePlayer;
+	Player* lePlayer;
 };
 
 #endif /* GAMESTATE_H */

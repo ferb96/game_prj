@@ -1,8 +1,10 @@
 #include "game.h"
+#include "gameState.h"
 #include <SDL2/SDL.h>
 #include "SDL2/SDL2_gfxPrimitives.h"
 #include <vector>
 #include <iostream>
+using namespace std;
 
 // Gameplay-related constants
 const int WINDOW_SIZE_X = 800;
@@ -16,6 +18,75 @@ const int BULLET_MOVE_SPEED = 20;
 /*
  * Implementing the functions in the Game class
  */
+void Game::runGame(){
+	Player* lePlayer = new Player(winSizeX/2, winSizeY/2);
+	lePlayer->setDecel(.05);
+	gamemgr.addPlayer(lePlayer);
+	gameLoop();
+	//scoreBoard();
+	close();
+}
+
+void Game::gameLoop(){
+	bool loop = true;
+	while (loop){
+		if ( !processInput() )
+			loop = false;
+		if ( !checkCollisions() )
+			loop = false;
+		moveObjects();
+		renderObjects();
+		SDL_Delay(16);
+	}
+}
+
+bool Game::checkCollisions(){
+	bool playerAlive = true;
+	Player* lePlayer = gamemgr.getPlayer();
+	gamemgr.resetIteRoid();
+	while ( !gamemgr.noMoreAsteroid() ){
+		Asteroid* roid = gamemgr.getAsteroid();
+		//check for collision between player and roid
+		gamemgr.resetIteBullet();
+		while ( !gamemgr.noMoreBullet() ){
+			Bullet* bull = gamemgr.getBullet();
+			//check for collision between roid and bull
+			//check for bullet expiration
+		}
+	}
+	return playerAlive;
+}
+
+void Game::moveObjects(){
+	Player* lePlayer = gamemgr.getPlayer();
+	if (playerAction[MOVING_UP])
+		lePlayer->setAccel(.15);
+	if (!playerAction[MOVING_UP])
+		lePlayer->setAccel(0);
+	if (playerAction[MOVING_RIGHT])
+		lePlayer->changeTrajectory(.07);
+	if (playerAction[MOVING_LEFT])
+		lePlayer->changeTrajectory(-.07);
+	lePlayer->updatePosition(winSizeX, winSizeY);
+}
+
+void Game::renderObjects(){
+	// Change color of background
+	SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 255 );
+
+	// First we clear the window with that background color
+	SDL_RenderClear( renderer );
+
+	// Change color of player
+	SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 255 );
+
+	// Render the player
+	Player* lePlayer = gamemgr.getPlayer();
+	lePlayer->drawSelf( renderer );
+ 
+	// Render the changes above to the window
+	SDL_RenderPresent( renderer );
+}
 
 Game::Game(){
 	this->window = NULL;
@@ -43,10 +114,10 @@ bool Game::init(){
  	// Create the renderer
 	if ( !createRenderer() )
 		return false;
- 
+ 	
  	// Setup the renderer
 	setupRenderer();
- 
+
 	return true;
 }
 
@@ -113,31 +184,13 @@ void Game::close()
 	return;
 }
 
-void Game::runGame(){
-	gameLoop();
-	scoreBoard();
-	close();
-}
-
-void Game::gameLoop(){
-	bool loop = true;
-	while (loop){
-		if ( !processInput() )
-			loop = false;
-		if ( !checkCollisions() )
-			loop = false;
-		moveObjects();
-		renderObjects();
-	}
-}
-
 bool Game::processInput(){
-	bool quit = false;
+	bool gameRunning = true;
 	SDL_Event event;
 	while ( SDL_PollEvent( &event ) ) {
 		switch( event.type ) {
 			case SDL_QUIT:
-				quit = true;
+				gameRunning = false;
 				break;
 
 			case SDL_KEYDOWN:
@@ -188,9 +241,5 @@ bool Game::processInput(){
 		    	break;
 		}
 	}
-	return quit;
-}
-
-bool Game::checkCollisions(){
-	
+	return gameRunning;
 }

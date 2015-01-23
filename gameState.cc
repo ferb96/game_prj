@@ -10,6 +10,11 @@ GameState::GameState(){
 	iteBull = leBullets.begin();
 }
 
+void GameState::addPlayer(Player* playa){
+	lePlayer = playa;
+	cout << "Adding the player" << endl;
+}
+
 void GameState::addAsteroid(Asteroid* roid){
 	leAsteroids.push_back(roid);
 	cout << "Adding a new roid" << endl;
@@ -34,6 +39,10 @@ void GameState::delBullet(){
 	}
 	else
 		cout << "Error: deleting nonexistent bullet" << endl;
+}
+
+Player* GameState::getPlayer(){
+	return lePlayer;
 }
 
 Asteroid* GameState::getAsteroid(){
