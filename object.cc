@@ -78,15 +78,15 @@ void Object::updatePosition(int limitX, int limitY) {
 		y = 0;
 }
 
-bool Object::checkCollision(Object incoming) {
-	double xDist = abs(x - incoming.getX()); // Calculates the difference in x values
-	double yDist = abs(y - incoming.getY()); // Calculates the difference in y values
+bool Object::checkCollision(Object* incoming) {
+	double xDist = x - incoming->getX(); // Calculates the difference in x values
+	double yDist = y - incoming->getY(); // Calculates the difference in y values
 	/* Finds the total linear distance between the first object and the 
 	second. Pythagorean theorem. c = sqrt((a*a) + (b*b)) */
 	double distance = sqrt((xDist * xDist) + (yDist * yDist)); 
 	/* The boolean "collide" is initialized true if the objects' centerpoints are 
 	close enough to warrant a collision. */
-	bool collide = (distance <= hitRad + incoming.getHitRad());
+	bool collide = (distance <= hitRad + incoming->getHitRad());
 	return collide;
 }
 

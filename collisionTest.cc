@@ -19,7 +19,8 @@ SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 
 GameState game;
-Asteroid ast1(sizeX/4, sizeY/4, 0.0, 2.0, 60, 0);
+Asteroid ast(sizeX/4, sizeY/4, 0.0, 2.0, 60, 0);
+Asteroid* ast1 = &ast;
 Player player1(sizeX/2, sizeY/2);
 // Declaring functions, implement them afterwards
 bool InitEverything();
@@ -42,6 +43,7 @@ bool playerShoot = false;
 // The main program
 int main( int argc, char* args[] )
 {
+	game.addAsteroid(ast1);
 	// Init everything, if init fails then quit
 	if ( !InitEverything() ) 
 		return -1;
@@ -120,15 +122,30 @@ void RunGame()
  		// Draw everything on the screen
  		movePlayer();
  		player1.updatePosition(sizeX, sizeY);
- 		ast1.updatePosition(sizeX, sizeY);
+ 		game.resetIteRoid();
+ 		while (!game.noMoreAsteroid()) {
+ 			Asteroid* ast1 = game.getAsteroid();
+ 			ast1->updatePosition(sizeX, sizeY);
+ 		}
  		game.resetIteBullet();
 		while (!game.noMoreBullet()) {
 			Bullet* bull = game.getBullet();
 			bull->updatePosition(sizeX, sizeY);
 			if ( bull->isExpired() )
 				game.delBullet();
-	}
-
+		}
+		game.resetIteRoid();
+		while (!game.noMoreAsteroid()) {
+ 			Asteroid* ast1 = game.getAsteroid();
+ 			game.resetIteBullet();
+			while (!game.noMoreBullet()) {
+				Bullet* bull = game.getBullet();
+				if(ast1->checkCollision(bull)){
+					game.delAsteroid();
+					game.delBullet();
+				}
+			}
+		}
 		Render();
  
 		// Add a 16msec delay to make our game run at ~60 fps
@@ -167,7 +184,12 @@ void Render()
 
 	// Render a box, aka a rectangle, aka out "Player"
 	player1.drawSelf( renderer );
-	ast1.drawSelf( renderer );
+	game.resetIteRoid();
+ 	while (!game.noMoreAsteroid()) {
+ 		Asteroid* ast1 = game.getAsteroid();
+ 		ast1->drawSelf( renderer );
+ 		}
+
 
 	game.resetIteBullet();
 	while (!game.noMoreBullet()) {

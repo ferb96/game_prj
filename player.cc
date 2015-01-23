@@ -95,12 +95,23 @@ void Player::drawSelf(SDL_Renderer *rend) {
 	double leftX = x + 15 * sin(nextAngle);
 	double leftY = y - 15 * cos(nextAngle);
 
+	double baseMidX = ((rightX + leftX) / 2.0) + .5;
+	double baseMidY = ((rightY + leftY) / 2.0) + .5;
+
 	// draw the triangle
 	trigonRGBA(rend,
                	int(frontX + .5), int(frontY + .5), // x y of first vertex
                 int(rightX + .5), int(rightY + .5), // x y of second vertex
                 int(leftX + .5), int(leftY + .5), // x y of third vertex
                 0xFF, 0xFF, 0xFF, 255); // R G B Alpha values, white
+	lineRGBA(rend,
+				int(frontX + .5), int(frontY + .5),
+				int(baseMidX), int(baseMidY),
+				0xFF, 0xFF, 0xFF, 255);
+
+	//if (exhaust) {
+
+	//}
 	
 }
 
