@@ -143,6 +143,5 @@ Bullet* Player::shoot(double bulletSpeed, double bulletReach) {
 
 	// Creates a bullet object inheriting that velocity
 	Bullet* newBullet = new Bullet(frontX, frontY, finalAlpha, finalSpeed, bulletReach);
-	cout << "Firing a bullet" << endl << "Velocity: " << finalSpeed << endl << "Trajectory: " << finalAlpha << endl;
 	return newBullet;
 }

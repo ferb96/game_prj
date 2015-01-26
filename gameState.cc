@@ -3,11 +3,35 @@
 #include "bullet.h"
 #include "player.h"
 #include <iostream>
+#include "const.h"
 using namespace std;
 
 GameState::GameState(){
+	Player* lePlayer = new Player(WINDOW_SIZE_X/2, WINDOW_SIZE_Y/2);
+	lePlayer->setDecel(PLAYER_DECELERATION);
+	addPlayer(lePlayer);
 	iteRoid = leAsteroids.begin();
 	iteBull = leBullets.begin();
+	level = 0;
+	minRoid = 1;
+	maxRoid = 2;
+	roidSpdLimit = .5;
+}
+
+void GameState::initLevel(){
+	level++;
+	if (level % 2 == 0)
+		maxRoid++;
+	if (level % 2 != 0)
+		minRoid++;
+	roidSpdLimit += .2;
+
+	//generating Asteroids
+	int numberOfRoids = rand() % (maxRoid - minRoid);
+	numberOfRoids += minRoid;
+	for (int i = 0; i < numberOfRoids; i++){
+		
+	}
 }
 
 void GameState::addPlayer(Player* playa){

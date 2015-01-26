@@ -31,13 +31,13 @@ private:
 	//the GameState
 	GameState gamemgr;
 
+	//current frame, for animations
+	int frame;
+
 	//gameplay-related values
 	int asteroidSplitNumber;
 	unsigned int lastShot;
 	unsigned int delayBetweenBullets;
-	int playerMoveSpeed;
-	int asteroidMoveSpeed;
-	int bulletMoveSpeed;
 	int winSizeX;
 	int winSizeY;
 

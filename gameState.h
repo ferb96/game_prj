@@ -11,6 +11,7 @@ class GameState
 {
 public:
 	GameState();
+	void initLevel();
 	void addPlayer(Player* playa);
 	void addAsteroid(Asteroid* roid);
 	void addBullet(Bullet* bull);
@@ -35,6 +36,11 @@ private:
 	vector<Asteroid*> leAsteroids;
 	vector<Bullet*> leBullets;
 	Player* lePlayer;
+
+	int level;
+	int minRoid;
+	int maxRoid;
+	double roidSpdLimit;
 };
 
 #endif /* GAMESTATE_H */

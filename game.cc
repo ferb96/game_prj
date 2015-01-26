@@ -1,5 +1,6 @@
 #include "game.h"
 #include "gameState.h"
+#include "const.h"
 #include <SDL2/SDL.h>
 #include "SDL2/SDL2_gfxPrimitives.h"
 #include <vector>
@@ -7,22 +8,11 @@
 #include <iostream>
 using namespace std;
 
-// Gameplay-related constants
-const int WINDOW_SIZE_X = 800;
-const int WINDOW_SIZE_Y = 600;
-const int ASTEROID_SPLIT_NUMBER = 2;
-const int DELAY_BETWEEN_BULLETS = 250;
-const int PLAYER_MOVE_SPEED = 8;
-const int ASTEROID_MOVE_SPEED = 9;
-const int BULLET_MOVE_SPEED = 15;
-
 /*
  * Implementing the functions in the Game class
  */
 void Game::runGame(){
-	Player* lePlayer = new Player(winSizeX/2, winSizeY/2);
-	lePlayer->setDecel(.02);
-	gamemgr.addPlayer(lePlayer);
+
 	Asteroid* ast1 = new Asteroid(winSizeX/4, winSizeY/4, 0.0, 2.0, 50, 0);
 	gamemgr.addAsteroid(ast1);
 	Asteroid* ast2 = new Asteroid(700, 500, 2.0, 1.0, 50, 0);
@@ -38,13 +28,16 @@ void Game::runGame(){
 void Game::gameLoop(){
 	bool loop = true;
 	while (loop){
+		//check player dead
+		//check level finished
 		if ( !processInput() )
 			loop = false;
 		if ( !checkCollisions() )
 			loop = false;
 		moveObjects();
 		renderObjects();
-		SDL_Delay(16);
+		SDL_Delay(17);
+		frame++;
 	}
 }
 
@@ -81,9 +74,9 @@ void Game::moveObjects(){
 	if (playerAction[MOVING_LEFT])
 		lePlayer->changeTrajectory(-.07);
 	if (playerAction[SHOOTING])
-		if (SDL_GetTicks() - lastShot > delayBetweenBullets){
+		if (SDL_GetTicks() - lastShot > DELAY_BETWEEN_BULLETS){
 			lastShot = SDL_GetTicks();
-			gamemgr.addBullet(lePlayer->shoot(bulletMoveSpeed, 500));
+			gamemgr.addBullet(lePlayer->shoot(BULLET_MOVE_SPEED, BULLET_LIFESPAN));
 		}
 	if (!playerAction[SHOOTING])
 		lastShot = 0;
@@ -107,8 +100,8 @@ void Game::moveObjects(){
 void Game::splitAsteroid(Asteroid* roid){
 	gamemgr.delAsteroid();
 	if (roid->getLevel() < 2){
-		Asteroid* newroid1 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() + M_PI/6, 2.0, 50, roid->getLevel()+1);
-		Asteroid* newroid2 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() - M_PI/6, 2.0, 50, roid->getLevel()+1);
+		Asteroid* newroid1 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() + M_PI/6, 3.0, 50, roid->getLevel()+1);
+		Asteroid* newroid2 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() - M_PI/6, 3.0, 50, roid->getLevel()+1);
 		gamemgr.addAsteroid(newroid1);
 		gamemgr.addAsteroid(newroid2);
 	}
@@ -122,7 +115,7 @@ void Game::renderObjects(){
 	// First we clear the window with that background color
 	SDL_RenderClear( renderer );
 
-	// Change color of player
+	// Color of every other objects
 	SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 255 );
 
 	// Render the player
@@ -145,15 +138,11 @@ void Game::renderObjects(){
 }
 
 Game::Game(){
+	this->frame = 0;
 	this->window = NULL;
 	this->renderer = NULL;
-	for (int i; i < TOTAL; i++)
+	for (int i = 0; i < TOTAL; i++)
 		playerAction[i] = false;
-	this->asteroidSplitNumber = ASTEROID_SPLIT_NUMBER;
-	this->delayBetweenBullets = DELAY_BETWEEN_BULLETS;
-	this->playerMoveSpeed = PLAYER_MOVE_SPEED;
-	this->asteroidMoveSpeed = ASTEROID_MOVE_SPEED;
-	this->bulletMoveSpeed = BULLET_MOVE_SPEED;
 	this->winSizeX = WINDOW_SIZE_X;
 	this->winSizeY = WINDOW_SIZE_Y;
 }

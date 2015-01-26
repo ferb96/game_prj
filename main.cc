@@ -2,9 +2,11 @@
 #include <iostream>
 #include "SDL2/SDL2_gfxPrimitives.h"
 #include "game.h"
+#include <ctime>
 
 // THE GLORIOUS MAIN FUNCTION
 int main(){
+	srand(time(NULL));
 	Game theGame;
 	if ( !theGame.init() )
 		return -1;
