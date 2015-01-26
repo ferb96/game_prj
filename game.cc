@@ -135,7 +135,7 @@ void Game::renderObjects(){
 Game::Game(){
 	this->window = NULL;
 	this->renderer = NULL;
-	for (int i; i < TOTAL; i++)
+	for (int i = 0; i < TOTAL; i++)
 		playerAction[i] = false;
 	this->asteroidSplitNumber = ASTEROID_SPLIT_NUMBER;
 	this->delayBetweenBullets = DELAY_BETWEEN_BULLETS;

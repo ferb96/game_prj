@@ -17,6 +17,8 @@ public:
 
 private:
 	int level;
+	int vel;
+	int type;
 };
 
 #endif /* ASTEROID_H */
