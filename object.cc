@@ -68,14 +68,14 @@ void Object::updatePosition(int limitX, int limitY) {
 	this->y -= velY;
 
 	// Screen wrap
-	if (x < 0)
-		x = limitX;
-	if (x > limitX)
-		x = 0;
-	if (y < 0)
-		y = limitY;
-	if (y > limitY)
-		y = 0;
+	if (x < 0 - hitRad)
+		x = limitX + hitRad;
+	if (x > limitX + hitRad)
+		x = 0 - hitRad;
+	if (y < 0 - hitRad)
+		y = limitY + hitRad;
+	if (y > limitY + hitRad)
+		y = 0 - hitRad;
 }
 
 bool Object::checkCollision(Object* incoming) {

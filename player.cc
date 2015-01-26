@@ -70,14 +70,15 @@ void Player::updatePosition(int limitX, int limitY){
 	y -= velY;
 
 	// Screen wrap
-	if (x < 0)
-		x = limitX;
-	if (x > limitX)
-		x = 0;
-	if (y < 0)
-		y = limitY;
-	if (y > limitY)
-		y = 0;
+	// Screen wrap
+	if (x < 0 - hitRad)
+		x = limitX + hitRad;
+	if (x > limitX + hitRad)
+		x = 0 - hitRad;
+	if (y < 0 - hitRad)
+		y = limitY + hitRad;
+	if (y > limitY + hitRad)
+		y = 0 - hitRad;
 }
 
 void Player::drawSelf(SDL_Renderer *rend) {
