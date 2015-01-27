@@ -4,6 +4,7 @@
 #include "player.h"
 #include <iostream>
 #include "const.h"
+#include "poof.h"
 #include <cmath>
 using namespace std;
 
@@ -76,6 +77,12 @@ void GameState::addBullet(Bullet* bull){
 	leBullets.push_back(bull);
 }
 
+void GameState::addPoofs(vector<Poof*> newPoofs){
+	for (int i = 0; i < newPoofs.size(); i++) {
+		lePoofs.push_back(newPoofs[i]);
+	}
+}
+
 void GameState::delAsteroid(){
 	if (iteRoid != leAsteroids.begin()){
 		iteRoid = leAsteroids.erase(iteRoid-1);
@@ -90,6 +97,14 @@ void GameState::delBullet(){
 	}
 	else
 		cout << "Error: deleting nonexistent bullet" << endl;
+}
+
+void GameState::delPoof(){
+	if (itePoof != lePoofs.begin()){
+		itePoof = lePoofs.erase(itePoof-1);
+	}
+	else
+		cout << "Error: deleting nonexistent poof" << endl;
 }
 
 Player* GameState::getPlayer(){
@@ -108,6 +123,12 @@ Bullet* GameState::getBullet(){
 	return tmp;
 }
 
+Poof* GameState::getPoof(){
+	Poof* tmp = *itePoof;
+	itePoof++;
+	return tmp;
+}
+
 bool GameState::noMoreAsteroid(){
 	if (iteRoid == leAsteroids.end())
 		return true;
@@ -120,12 +141,22 @@ bool GameState::noMoreBullet(){
 	return false;
 }
 
+bool GameState::noMorePoof(){
+	if (itePoof == lePoofs.end())
+		return true;
+	return false;
+}
+
 void GameState::resetIteRoid(){
 	iteRoid = this->leAsteroids.begin();
 }
 
 void GameState::resetIteBullet(){
 	iteBull = this->leBullets.begin();
+}
+
+void GameState::resetItePoof(){
+	itePoof = this->lePoofs.begin();
 }
 
 bool GameState::zeroAsteroid(){

@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include "poof.h"
+#include "const.h"
 using namespace std;
 
 Asteroid::Asteroid(double x, double y, double traj, double iVel, double level0Radius, int iLevel)
@@ -271,7 +272,7 @@ vector<Poof*> Asteroid::goBoom() {
 	int num = (rand() % 4) + 4;
 	vector<Poof*> boom;
 	for (int i = 0; i < num; i ++) {
-		Poof* zoom = new Poof(x, y, (rand() % 6), ((rand() % 4) + 5), 1000);
+		Poof* zoom = new Poof(x, y, (rand() % 100 + 1) * 1.0 / 100 * M_PI*2, ((rand() % 4) + 5), POOF_LIFESPAN);
 		boom.push_back(zoom);
 	}
 	return boom;

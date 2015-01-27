@@ -6,6 +6,7 @@
 #include <vector>
 #include <cmath>
 #include <iostream>
+#include "poof.h"
 using namespace std;
 
 /*
@@ -84,6 +85,7 @@ void Game::checkCollisions(){
 			Bullet* bull = gamemgr.getBullet();
 			//check for collision between roid and bull
 			if ( roid->checkCollision(bull) ){
+				gamemgr.addPoofs(roid->goBoom());
 				gamemgr.splitAsteroid(roid);
 				gamemgr.delBullet();
 			}
@@ -106,6 +108,14 @@ void Game::moveObjects(){
 		//check for bullet expiration
 		if ( bull->isExpired() )
 			gamemgr.delBullet();
+	}
+	gamemgr.resetItePoof();
+	while ( !gamemgr.noMorePoof() ){
+		Poof* puff = gamemgr.getPoof();
+		puff->updatePosition(WINDOW_SIZE_X, WINDOW_SIZE_Y);
+		//check for bullet expiration
+		if ( puff->isExpired() )
+			gamemgr.delPoof();
 	}
 }
 
@@ -157,6 +167,12 @@ void Game::renderObjects(){
 	while ( !gamemgr.noMoreBullet() ){
 		Bullet* bull = gamemgr.getBullet();
 		bull->drawSelf(renderer);
+	}
+
+	gamemgr.resetItePoof();
+	while ( !gamemgr.noMorePoof() ){
+		Poof* puff = gamemgr.getPoof();
+		puff->drawSelf(renderer);
 	}
  
 	// Render the changes above to the window

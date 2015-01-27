@@ -8,6 +8,7 @@
 #include "bullet.h"
 #include "player.h"
 #include "gameState.h"
+#include "poof.h"
 using namespace std;
 
 class Game
