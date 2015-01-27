@@ -39,11 +39,14 @@ private:
 	unsigned int lastShot;
 	unsigned int lastDeath;
 	unsigned int lastLevelClear;
+	//unsigned int frameCount;
 	bool respawnDelay;
 	bool levelDelay;
 
 	//player actions: array of boolean
 	bool playerAction[TOTAL];
+
+	bool drawPlayer;
 
 	//SDL elements
 	SDL_Window* window;

@@ -7,6 +7,7 @@
 #include <cmath>
 #include <iostream>
 #include "poof.h"
+#include <ctime>
 using namespace std;
 
 /*
@@ -31,6 +32,7 @@ void Game::gameLoop(){
 		checkCollisions();
 		moveObjects();
 		renderObjects();
+		frame++;
 		SDL_Delay(17);
 	}
 }
@@ -141,6 +143,8 @@ void Game::processInput(){
 }
 
 void Game::renderObjects(){
+	//frameCount++;
+	
 	// Change color of background
 	SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 255 );
 
@@ -152,8 +156,13 @@ void Game::renderObjects(){
 
 	// Render the player
 	Player* lePlayer = gamemgr.getPlayer();
-	if (lePlayer->isAlive())
-		lePlayer->drawSelf( renderer );
+	 
+	if (lePlayer->isAlive()) {
+		if (!lePlayer->isInvul())
+			lePlayer->drawSelf( renderer );
+		else if (frame % 2 == 0) 
+			lePlayer->drawSelf( renderer );
+	}
 
 	//Render the Asteroids
 	gamemgr.resetIteRoid();
@@ -190,6 +199,7 @@ Game::Game(){
 	lastLevelClear = 0;
 	respawnDelay = false;
 	levelDelay = false;
+	drawPlayer = true;
 }
 
 bool Game::init(){
