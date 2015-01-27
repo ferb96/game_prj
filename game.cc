@@ -77,14 +77,14 @@ void Game::checkCollisions(){
 		if ( lePlayer->checkCollision(roid) && lePlayer->isAlive() && !lePlayer->isInvul()){
 			lePlayer->setAlive(false);
 			lePlayer->minusOneLife();
-			splitAsteroid(roid);
+			gamemgr.splitAsteroid(roid);
 		}
 		gamemgr.resetIteBullet();
 		while ( !gamemgr.noMoreBullet() ){
 			Bullet* bull = gamemgr.getBullet();
 			//check for collision between roid and bull
 			if ( roid->checkCollision(bull) ){
-				splitAsteroid(roid);
+				gamemgr.splitAsteroid(roid);
 				gamemgr.delBullet();
 			}
 		}
@@ -128,17 +128,6 @@ void Game::processInput(){
 		if (!playerAction[SHOOTING])
 			lastShot = 0;
 	}
-}
-
-void Game::splitAsteroid(Asteroid* roid){
-	gamemgr.delAsteroid();
-	if (roid->getLevel() < 2){
-		Asteroid* newroid1 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() + M_PI/6, 1.0, 50, roid->getLevel()+1);
-		Asteroid* newroid2 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() - M_PI/6, 1.0, 50, roid->getLevel()+1);
-		gamemgr.addAsteroid(newroid1);
-		gamemgr.addAsteroid(newroid2);
-	}
-	gamemgr.resetIteRoid();
 }
 
 void Game::renderObjects(){

@@ -10,6 +10,7 @@ public:
 	Asteroid(double x, double y, double traj, double iVel, double level0Radius, int iLevel);
 
 	double getLevel() const;
+	double getVel() const;
 
 	void setLevel(double newLevel);
 
@@ -17,7 +18,7 @@ public:
 
 private:
 	int level;
-	int vel;
+	double vel;
 	int type;
 };
 

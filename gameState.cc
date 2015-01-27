@@ -42,6 +42,17 @@ void GameState::initLevel(){
 	}
 }
 
+void GameState::splitAsteroid(Asteroid* roid){
+	delAsteroid();
+	if (roid->getLevel() < 2){
+		Asteroid* newroid1 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() + M_PI/6, roid->getVel() + .5, 50, roid->getLevel()+1);
+		Asteroid* newroid2 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() - M_PI/6, roid->getVel() + .5, 50, roid->getLevel()+1);
+		addAsteroid(newroid1);
+		addAsteroid(newroid2);
+	}
+	resetIteRoid();
+}
+
 void GameState::addPlayer(Player* playa){
 	lePlayer = playa;
 }

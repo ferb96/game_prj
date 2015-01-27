@@ -12,6 +12,7 @@ class GameState
 public:
 	GameState();
 	void initLevel();
+	void splitAsteroid(Asteroid* roid);
 	void addPlayer(Player* playa);
 	void addAsteroid(Asteroid* roid);
 	void addBullet(Bullet* bull);

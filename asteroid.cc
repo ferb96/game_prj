@@ -23,6 +23,10 @@ double Asteroid::getLevel() const {
 	return level;
 }
 
+double Asteroid::getVel() const {
+	return vel;
+}
+
 void Asteroid::setLevel(double newLevel) {
 	level = newLevel;
 }
