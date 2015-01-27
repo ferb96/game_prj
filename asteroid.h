@@ -3,6 +3,9 @@
 
 #include "object.h"
 #include <SDL2/SDL.h>
+#include "poof.h"
+#include <vector>
+using namespace std;
 
 class Asteroid: public Object {
 
@@ -15,6 +18,7 @@ public:
 	void setLevel(double newLevel);
 
 	void drawSelf(SDL_Renderer *rend);
+	vector<Poof*> goBoom();
 
 private:
 	int level;

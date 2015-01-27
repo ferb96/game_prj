@@ -5,6 +5,9 @@
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
+#include <vector>
+#include "poof.h"
+using namespace std;
 
 Asteroid::Asteroid(double x, double y, double traj, double iVel, double level0Radius, int iLevel)
 	: Object(x, y, traj, iVel)
@@ -263,6 +266,15 @@ void Asteroid::drawSelf(SDL_Renderer *rend) {
 					x - hitRad, (y + (hitRad/ 5)),
 					0xFF, 0xFF, 0xFF, 255);
 	}
+}
+vector<Poof*> Asteroid::goBoom() {
+	int num = (rand() % 4) + 4;
+	vector<Poof*> boom;
+	for (int i = 0; i < num; i ++) {
+		Poof* zoom = new Poof(x, y, (rand() % 6), ((rand() % 4) + 5), 1000);
+		boom.push_back(zoom);
+	}
+	return boom;
+}
 
 	//circleRGBA(rend, x, y, hitRad, 0xFF, 0xFF, 0xFF, 255);
-}
