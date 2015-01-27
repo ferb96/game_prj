@@ -41,7 +41,8 @@ private:
 	int level;
 	int minRoid;
 	int maxRoid;
-	double roidSpdLimit;
+	double roidMinSpd;
+	double roidMaxSpd;
 };
 
 #endif /* GAMESTATE_H */

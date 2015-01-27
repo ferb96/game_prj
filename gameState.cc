@@ -14,28 +14,39 @@ GameState::GameState(){
 	iteRoid = leAsteroids.begin();
 	iteBull = leBullets.begin();
 	level = 0;
-	minRoid = 1;
-	maxRoid = 2;
-	roidSpdLimit = .5;
+	minRoid = 4;
+	maxRoid = 6;
+	roidMinSpd = .5;
+	roidMaxSpd = 1.5;
 }
 
 void GameState::initLevel(){
 	level++;
-	if (level % 2 == 0 && level != 1)
+	if (level % 5 == 0 && level != 1){
 		maxRoid++;
-	if (level % 2 != 0 && level != 1)
 		minRoid++;
-	if (roidSpdLimit < ASTEROID_MAX_SPD)
-		roidSpdLimit += .2;
+	}
+	if (roidMaxSpd < ASTEROID_MAX_SPD && level != 1){
+		roidMinSpd += ASTEROID_MAX_SPD/18;
+		roidMaxSpd += ASTEROID_MAX_SPD/15;
+	}
+	cout << "minspd =" << roidMinSpd << " maxspd=" << roidMaxSpd << endl;
 
+	Player* lePlayer = getPlayer();
 	//generating Asteroids
 	int numberOfRoids = rand() % (maxRoid - minRoid + 1);
 	numberOfRoids += minRoid;
 	for (int i = 0; i < numberOfRoids; i++){
-		double roidX = (rand() % 100 + 1) * 1.0 / 100 * WINDOW_SIZE_X;
-		double roidY = (rand() % 100 + 1) * 1.0 / 100 * WINDOW_SIZE_Y;
+		double roidX;
+		double roidY;
+		double distanceFromPlayer;
+		do {
+			roidX = (rand() % 100 + 1) * 1.0 / 100 * WINDOW_SIZE_X;
+			roidY = (rand() % 100 + 1) * 1.0 / 100 * WINDOW_SIZE_Y;
+			distanceFromPlayer = sqrt( pow(roidX - lePlayer->getX(), 2) + pow(roidY - lePlayer->getY(), 2) );
+		} while (distanceFromPlayer < SAFETY_ZONE);
 		double roidTraj = (rand() % 100 + 1) * 1.0 / 100 * M_PI*2;
-		double roidSpd = (rand() % 100 + 1) * 1.0 / 100 * roidSpdLimit;
+		double roidSpd = (rand() % 100 + 1) * 1.0 / 100 * (roidMaxSpd - roidMinSpd) + roidMinSpd;
 		Asteroid* roid = new Asteroid(roidX, roidY, roidTraj, roidSpd, ASTEROID_INITIAL_RADIUS, 0);
 		addAsteroid(roid);
 		cout << "adding a roid at x=" << roidX << " y=" << roidY << " traj=" << roidTraj << " spd=" << roidSpd << endl;
