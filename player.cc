@@ -7,7 +7,7 @@
 #include <iostream>
 using namespace std;
 
-Player::Player(double x_pos, double y_pos)
+Player::Player(double x_pos, double y_pos, int lives)
 	: Object(x_pos, y_pos, 0.0, 0.0)
 {
 	setHitRad(22);
@@ -15,6 +15,9 @@ Player::Player(double x_pos, double y_pos)
 	decelMag = 0;
 	decelAmt = 0.0;
 	decelTraj = 0.0;
+	livesLeft = lives;
+	alive = true;
+	invul = false;
 }
 
 void Player::changeTrajectory(double addTraj) {
@@ -26,12 +29,40 @@ void Player::changeTrajectory(double addTraj) {
 		trajectory += RADIAN_CIRCLE;
 }
 
+bool Player::isAlive(){
+	return alive;
+}
+bool Player::isInvul(){
+	return invul;
+}
+void Player::setAlive(bool state){
+	alive = state;
+}
+void Player::setInvul(bool state){
+	invul = state;
+}
+void Player::minusOneLife(){
+	livesLeft -= 1;
+}
+int Player::getLivesLeft(){
+	return livesLeft;
+}
+
 void Player::setAccel(double accel) {
 	accelMag = accel;
 }
 
 void Player::setDecel(double decel) {
 	decelMag = decel;
+}
+
+void Player::resetPlayer(double x_pos, double y_pos){
+	x = x_pos/2;
+	y = y_pos/2;
+	trajectory = 0.0;
+	velX = 0;
+	velY = 0;
+	decelAmt = 0;
 }
 
 void Player::updatePosition(int limitX, int limitY){

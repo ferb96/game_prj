@@ -13,13 +13,7 @@ using namespace std;
  */
 void Game::runGame(){
 
-	Asteroid* ast1 = new Asteroid(winSizeX/4, winSizeY/4, 0.0, 2.0, 50, 0);
-	gamemgr.addAsteroid(ast1);
-	Asteroid* ast2 = new Asteroid(700, 500, 2.0, 1.0, 50, 0);
-	gamemgr.addAsteroid(ast2);
-	Asteroid* ast3 = new Asteroid(100, 400, 3.0, 1.5, 50, 0);
-	gamemgr.addAsteroid(ast3);
-
+	gamemgr.initLevel();
 	gameLoop();
 	//scoreBoard();
 	close();
@@ -28,28 +22,62 @@ void Game::runGame(){
 void Game::gameLoop(){
 	bool loop = true;
 	while (loop){
-		//check player dead
-		//check level finished
-		if ( !processInput() )
+		if ( !checkLevel() )
 			loop = false;
-		if ( !checkCollisions() )
+		if ( !getInput() )
 			loop = false;
+		processInput();
+		checkCollisions();
 		moveObjects();
 		renderObjects();
 		SDL_Delay(17);
-		frame++;
 	}
 }
 
-bool Game::checkCollisions(){
-	bool playerAlive = true;
+bool Game::checkLevel(){
+	bool gameOver = false;
+
+	// Handling player respawn
+	Player* lePlayer = gamemgr.getPlayer();
+	if ( lePlayer->isAlive()){
+		lastDeath = SDL_GetTicks();
+	}
+	else{
+		if (lePlayer->getLivesLeft() == 0)
+			gameOver = true;
+		if (lePlayer->getLivesLeft() > 0){
+			if (!lePlayer->isInvul() && SDL_GetTicks() - lastDeath >= DELAY_BETWEEN_RESPAWNS){
+				lePlayer->setAlive(true);
+				lePlayer->setInvul(true);
+				lePlayer->resetPlayer(WINDOW_SIZE_X, WINDOW_SIZE_Y);
+			}
+			if (SDL_GetTicks() - lastDeath >= INVULNERABLE_DURATION)
+				lePlayer->setInvul(false);
+		}
+	}
+
+	// Handling new levels
+	if (gamemgr.zeroAsteroid()){
+		if (SDL_GetTicks() - lastLevelClear >= DELAY_BETWEEN_LEVELS)
+			gamemgr.initLevel();
+	}
+	else
+		lastLevelClear = SDL_GetTicks();
+
+	return (!gameOver);
+}
+
+void Game::checkCollisions(){
 	Player* lePlayer = gamemgr.getPlayer();
 	gamemgr.resetIteRoid();
 	while ( !gamemgr.noMoreAsteroid() ){
 		Asteroid* roid = gamemgr.getAsteroid();
 		//check for collision between player and roid
-		if ( lePlayer->checkCollision(roid) )
-			playerAlive = false;
+		if ( lePlayer->checkCollision(roid) && lePlayer->isAlive()){
+			lePlayer->setAlive(false);
+			lePlayer->minusOneLife();
+			splitAsteroid(roid);
+		}
 		gamemgr.resetIteBullet();
 		while ( !gamemgr.noMoreBullet() ){
 			Bullet* bull = gamemgr.getBullet();
@@ -60,48 +88,52 @@ bool Game::checkCollisions(){
 			}
 		}
 	}
-	return playerAlive;
 }
 
 void Game::moveObjects(){
 	Player* lePlayer = gamemgr.getPlayer();
-	if (playerAction[MOVING_UP])
-		lePlayer->setAccel(.08);
-	if (!playerAction[MOVING_UP])
-		lePlayer->setAccel(0);
-	if (playerAction[MOVING_RIGHT])
-		lePlayer->changeTrajectory(.07);
-	if (playerAction[MOVING_LEFT])
-		lePlayer->changeTrajectory(-.07);
-	if (playerAction[SHOOTING])
-		if (SDL_GetTicks() - lastShot > DELAY_BETWEEN_BULLETS){
-			lastShot = SDL_GetTicks();
-			gamemgr.addBullet(lePlayer->shoot(BULLET_MOVE_SPEED, BULLET_LIFESPAN));
-		}
-	if (!playerAction[SHOOTING])
-		lastShot = 0;
-
-	lePlayer->updatePosition(winSizeX, winSizeY);
+	lePlayer->updatePosition(WINDOW_SIZE_X, WINDOW_SIZE_Y);
 	gamemgr.resetIteRoid();
 	while ( !gamemgr.noMoreAsteroid() ){
 		Asteroid* roid = gamemgr.getAsteroid();
-		roid->updatePosition(winSizeX, winSizeY);
+		roid->updatePosition(WINDOW_SIZE_X, WINDOW_SIZE_Y);
 	}
 	gamemgr.resetIteBullet();
 	while ( !gamemgr.noMoreBullet() ){
 		Bullet* bull = gamemgr.getBullet();
-		bull->updatePosition(winSizeX, winSizeY);
+		bull->updatePosition(WINDOW_SIZE_X, WINDOW_SIZE_Y);
 		//check for bullet expiration
 		if ( bull->isExpired() )
 			gamemgr.delBullet();
 	}
 }
 
+void Game::processInput(){
+	Player* lePlayer = gamemgr.getPlayer();
+	if (lePlayer->isAlive()){
+		if (playerAction[MOVING_UP])
+			lePlayer->setAccel(.08);
+		if (!playerAction[MOVING_UP])
+			lePlayer->setAccel(0);
+		if (playerAction[MOVING_RIGHT])
+			lePlayer->changeTrajectory(.07);
+		if (playerAction[MOVING_LEFT])
+			lePlayer->changeTrajectory(-.07);
+		if (playerAction[SHOOTING])
+			if (SDL_GetTicks() - lastShot > DELAY_BETWEEN_BULLETS){
+				lastShot = SDL_GetTicks();
+				gamemgr.addBullet(lePlayer->shoot(BULLET_MOVE_SPEED, BULLET_LIFESPAN));
+			}
+		if (!playerAction[SHOOTING])
+			lastShot = 0;
+	}
+}
+
 void Game::splitAsteroid(Asteroid* roid){
 	gamemgr.delAsteroid();
 	if (roid->getLevel() < 2){
-		Asteroid* newroid1 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() + M_PI/6, 3.0, 50, roid->getLevel()+1);
-		Asteroid* newroid2 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() - M_PI/6, 3.0, 50, roid->getLevel()+1);
+		Asteroid* newroid1 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() + M_PI/6, 1.0, 50, roid->getLevel()+1);
+		Asteroid* newroid2 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() - M_PI/6, 1.0, 50, roid->getLevel()+1);
 		gamemgr.addAsteroid(newroid1);
 		gamemgr.addAsteroid(newroid2);
 	}
@@ -120,13 +152,17 @@ void Game::renderObjects(){
 
 	// Render the player
 	Player* lePlayer = gamemgr.getPlayer();
-	lePlayer->drawSelf( renderer );
+	if (lePlayer->isAlive())
+		lePlayer->drawSelf( renderer );
 
+	//Render the Asteroids
 	gamemgr.resetIteRoid();
 	while ( !gamemgr.noMoreAsteroid() ){
 		Asteroid* roid = gamemgr.getAsteroid();
 		roid->drawSelf(renderer);
 	}
+
+	//Render the Bullets
 	gamemgr.resetIteBullet();
 	while ( !gamemgr.noMoreBullet() ){
 		Bullet* bull = gamemgr.getBullet();
@@ -138,13 +174,16 @@ void Game::renderObjects(){
 }
 
 Game::Game(){
-	this->frame = 0;
-	this->window = NULL;
+	window = NULL;
 	this->renderer = NULL;
 	for (int i = 0; i < TOTAL; i++)
 		playerAction[i] = false;
-	this->winSizeX = WINDOW_SIZE_X;
-	this->winSizeY = WINDOW_SIZE_Y;
+	this->frame = 0;
+	lastShot = 0;
+	lastDeath = 0;
+	lastLevelClear = 0;
+	respawnDelay = false;
+	levelDelay = false;
 }
 
 bool Game::init(){
@@ -179,9 +218,9 @@ bool Game::initSDL()
 
 bool Game::createWindow()
 {
-	this->window = SDL_CreateWindow( "Asteroids", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, this->winSizeX, this->winSizeY, 0 );
+	window = SDL_CreateWindow( "Asteroids", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_SIZE_X, WINDOW_SIZE_Y, 0 );
  
-	if ( this->window == NULL )
+	if ( window == NULL )
 	{
 		std::cout << "Failed to create window : " << SDL_GetError();
 		return false;
@@ -192,7 +231,7 @@ bool Game::createWindow()
 
 bool Game::createRenderer()
 {
-	this->renderer = SDL_CreateRenderer( this->window, -1, 0 );
+	this->renderer = SDL_CreateRenderer( window, -1, 0 );
  
 	if ( this->renderer == NULL )
 	{
@@ -206,7 +245,7 @@ bool Game::createRenderer()
 void Game::setupRenderer()
 {
 	// Set size of renderer to the same as window
-	SDL_RenderSetLogicalSize( this->renderer, this->winSizeX, this->winSizeY );
+	SDL_RenderSetLogicalSize( this->renderer, WINDOW_SIZE_X, WINDOW_SIZE_Y );
  
 	// Set color of renderer to red
 	SDL_SetRenderDrawColor( this->renderer, 0x00, 0x00, 0x00, 255 );
@@ -220,8 +259,8 @@ void Game::close()
 	this->renderer = NULL;
 
 	//Destroy window
-	SDL_DestroyWindow( this->window );
-	this->window = NULL;
+	SDL_DestroyWindow( window );
+	window = NULL;
 
 	//Quit SDL subsystems
 	SDL_Quit();
@@ -229,13 +268,13 @@ void Game::close()
 	return;
 }
 
-bool Game::processInput(){
-	bool gameRunning = true;
+bool Game::getInput(){
+	bool notQuitted = true;
 	SDL_Event event;
 	while ( SDL_PollEvent( &event ) ) {
 		switch( event.type ) {
 			case SDL_QUIT:
-				gameRunning = false;
+				notQuitted = false;
 				break;
 
 			case SDL_KEYDOWN:
@@ -286,5 +325,5 @@ bool Game::processInput(){
 		    	break;
 		}
 	}
-	return gameRunning;
+	return notQuitted;
 }

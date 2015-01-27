@@ -4,10 +4,11 @@
 #include "player.h"
 #include <iostream>
 #include "const.h"
+#include <cmath>
 using namespace std;
 
 GameState::GameState(){
-	Player* lePlayer = new Player(WINDOW_SIZE_X/2, WINDOW_SIZE_Y/2);
+	Player* lePlayer = new Player(WINDOW_SIZE_X/2, WINDOW_SIZE_Y/2, PLAYER_LIVES);
 	lePlayer->setDecel(PLAYER_DECELERATION);
 	addPlayer(lePlayer);
 	iteRoid = leAsteroids.begin();
@@ -20,17 +21,24 @@ GameState::GameState(){
 
 void GameState::initLevel(){
 	level++;
-	if (level % 2 == 0)
+	if (level % 2 == 0 && level != 1)
 		maxRoid++;
-	if (level % 2 != 0)
+	if (level % 2 != 0 && level != 1)
 		minRoid++;
-	roidSpdLimit += .2;
+	if (roidSpdLimit < ASTEROID_MAX_SPD)
+		roidSpdLimit += .2;
 
 	//generating Asteroids
-	int numberOfRoids = rand() % (maxRoid - minRoid);
+	int numberOfRoids = rand() % (maxRoid - minRoid + 1);
 	numberOfRoids += minRoid;
 	for (int i = 0; i < numberOfRoids; i++){
-		
+		double roidX = (rand() % 100 + 1) * 1.0 / 100 * WINDOW_SIZE_X;
+		double roidY = (rand() % 100 + 1) * 1.0 / 100 * WINDOW_SIZE_Y;
+		double roidTraj = (rand() % 100 + 1) * 1.0 / 100 * M_PI*2;
+		double roidSpd = (rand() % 100 + 1) * 1.0 / 100 * roidSpdLimit;
+		Asteroid* roid = new Asteroid(roidX, roidY, roidTraj, roidSpd, ASTEROID_INITIAL_RADIUS, 0);
+		addAsteroid(roid);
+		cout << "adding a roid at x=" << roidX << " y=" << roidY << " traj=" << roidTraj << " spd=" << roidSpd << endl;
 	}
 }
 
@@ -98,10 +106,10 @@ void GameState::resetIteBullet(){
 	iteBull = this->leBullets.begin();
 }
 
-vector<Asteroid*>::iterator GameState::getIteRoid(){
-	return iteRoid;
+bool GameState::zeroAsteroid(){
+	return (leAsteroids.size() == 0);
 }
 
-void GameState::setIteRoid(vector<Asteroid*>::iterator newIte){
-	iteRoid = newIte;
+int GameState::getLevel(){
+	return level;
 }

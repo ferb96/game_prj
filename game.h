@@ -35,11 +35,11 @@ private:
 	int frame;
 
 	//gameplay-related values
-	int asteroidSplitNumber;
 	unsigned int lastShot;
-	unsigned int delayBetweenBullets;
-	int winSizeX;
-	int winSizeY;
+	unsigned int lastDeath;
+	unsigned int lastLevelClear;
+	bool respawnDelay;
+	bool levelDelay;
 
 	//player actions: array of boolean
 	bool playerAction[TOTAL];
@@ -56,8 +56,10 @@ private:
 
 	//processing functions
 	void gameLoop();
-	bool processInput();
-	bool checkCollisions();
+	bool checkLevel();
+	bool getInput();
+	void processInput();
+	void checkCollisions();
 	void splitAsteroid(Asteroid* roid);
 	void moveObjects();
 	void renderObjects();

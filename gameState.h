@@ -28,8 +28,8 @@ public:
 	void resetIteRoid();
 	void resetIteBullet();
 
-	vector<Asteroid*>::iterator getIteRoid();
-	void setIteRoid(vector<Asteroid*>::iterator newIte);
+	bool zeroAsteroid();
+	int getLevel();
 private:
 	vector<Asteroid*>::iterator iteRoid; // Asteroid iterator, pointing to current Asteroid object
 	vector<Bullet*>::iterator iteBull; // Bullet iterator, pointing to current Bullet object
