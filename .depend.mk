@@ -1,5 +1,5 @@
 object.o: object.cc object.h
-player.o: player.cc player.h object.h bullet.h
+player.o: player.cc player.h object.h bullet.h poof.h const.h
 main.o: main.cc game.h asteroid.h object.h poof.h bullet.h player.h \
   gameState.h
 game.o: game.cc game.h asteroid.h object.h poof.h bullet.h player.h \

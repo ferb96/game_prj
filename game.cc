@@ -78,6 +78,7 @@ void Game::checkCollisions(){
 		Asteroid* roid = gamemgr.getAsteroid();
 		//check for collision between player and roid
 		if ( lePlayer->checkCollision(roid) && lePlayer->isAlive() && !lePlayer->isInvul()){
+			gamemgr.addPoofs(lePlayer->goBoom());
 			lePlayer->setAlive(false);
 			lePlayer->minusOneLife();
 			gamemgr.splitAsteroid(roid);
@@ -143,7 +144,6 @@ void Game::processInput(){
 }
 
 void Game::renderObjects(){
-	//frameCount++;
 	
 	// Change color of background
 	SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 255 );
@@ -199,7 +199,6 @@ Game::Game(){
 	lastLevelClear = 0;
 	respawnDelay = false;
 	levelDelay = false;
-	drawPlayer = true;
 }
 
 bool Game::init(){

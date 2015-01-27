@@ -46,8 +46,6 @@ private:
 	//player actions: array of boolean
 	bool playerAction[TOTAL];
 
-	bool drawPlayer;
-
 	//SDL elements
 	SDL_Window* window;
 	SDL_Renderer* renderer;

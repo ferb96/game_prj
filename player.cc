@@ -4,7 +4,10 @@
 #include "player.h"
 #include "bullet.h"
 #include "object.h"
+#include "poof.h"
+#include "const.h"
 #include <iostream>
+#include <vector>
 using namespace std;
 
 Player::Player(double x_pos, double y_pos, int lives)
@@ -166,7 +169,6 @@ void Player::drawSelf(SDL_Renderer *rend) {
 
 Bullet* Player::shoot(double bulletSpeed, double bulletReach) {
 	// Uses the pythagorean theorem to calculate total player velocity from x/y components
-	const double RADIAN_QUARTER = M_PI / 2;
 	double bulletTraj = trajectory; // The new bullet's trajectory is the direction the player is facing
 	double finalX = velX + bulletSpeed * (sin(bulletTraj));
 	double finalY = velY + bulletSpeed * (cos(bulletTraj));
@@ -176,4 +178,14 @@ Bullet* Player::shoot(double bulletSpeed, double bulletReach) {
 	// Creates a bullet object inheriting that velocity
 	Bullet* newBullet = new Bullet(frontX, frontY, finalAlpha, finalSpeed, bulletReach);
 	return newBullet;
+}
+
+vector<Poof*> Player::goBoom() {
+	int num = (rand() % 8) + 20;
+	vector<Poof*> boom;
+	for (int i = 0; i < num; i ++) {
+		Poof* zoom = new Poof(x, y, (rand() % 100 + 1) * 1.0 / 100 * M_PI*2, ((rand() % 4) + 5), POOF_LIFESPAN * 3);
+		boom.push_back(zoom);
+	}
+	return boom;
 }

@@ -4,6 +4,9 @@
 
 #include "object.h"
 #include "bullet.h"
+#include "poof.h"
+#include <vector>
+using namespace std;
 
 class Player: public Object
 {
@@ -32,6 +35,7 @@ public:
 	void drawSelf(SDL_Renderer *rend);
 	// Creates a new bullet object at the position of the player's "front" point, held in the data members 
 	Bullet* shoot(double bulletSpeed, double bulletReach);
+	vector<Poof*> goBoom();
 private:
 	bool alive;
 	bool invul;
