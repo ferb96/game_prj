@@ -39,21 +39,22 @@ bool Game::checkLevel(){
 
 	// Handling player respawn
 	Player* lePlayer = gamemgr.getPlayer();
-	if ( lePlayer->isAlive()){
-		lastDeath = SDL_GetTicks();
+
+	if ( lePlayer->isAlive() ){
+		if ( lePlayer->isInvul() && SDL_GetTicks() - lastDeath >= INVULNERABLE_DURATION )
+			lePlayer->setInvul(false);
+		if ( !lePlayer->isInvul() )
+			lastDeath = SDL_GetTicks();
 	}
-	else{
-		if (lePlayer->getLivesLeft() == 0)
+	if ( !lePlayer->isAlive() ){
+		if ( lePlayer-> getLivesLeft() == 0 )
 			gameOver = true;
-		if (lePlayer->getLivesLeft() > 0){
-			if (!lePlayer->isInvul() && SDL_GetTicks() - lastDeath >= DELAY_BETWEEN_RESPAWNS){
+		if ( lePlayer-> getLivesLeft() > 0 )
+			if ( SDL_GetTicks() - lastDeath >= DELAY_BETWEEN_RESPAWNS ){
 				lePlayer->setAlive(true);
 				lePlayer->setInvul(true);
 				lePlayer->resetPlayer(WINDOW_SIZE_X, WINDOW_SIZE_Y);
 			}
-			if (SDL_GetTicks() - lastDeath >= INVULNERABLE_DURATION)
-				lePlayer->setInvul(false);
-		}
 	}
 
 	// Handling new levels
@@ -73,7 +74,7 @@ void Game::checkCollisions(){
 	while ( !gamemgr.noMoreAsteroid() ){
 		Asteroid* roid = gamemgr.getAsteroid();
 		//check for collision between player and roid
-		if ( lePlayer->checkCollision(roid) && lePlayer->isAlive()){
+		if ( lePlayer->checkCollision(roid) && lePlayer->isAlive() && !lePlayer->isInvul()){
 			lePlayer->setAlive(false);
 			lePlayer->minusOneLife();
 			splitAsteroid(roid);

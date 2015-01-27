@@ -15,9 +15,7 @@ Asteroid::Asteroid(double x, double y, double traj, double iVel, double level0Ra
 			hitRad = hitRad / 2;
 		}
 		vel = iVel;
-		srand(traj);
 		type = rand() % 4;
-		std::cout << "Type: " << type;
 
 	}
 
