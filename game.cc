@@ -176,6 +176,8 @@ void Game::renderObjects(){
 	else{
 		string gameOverText = "!!! GAME OVER !!!";
 		renderText(gameOverText, WINDOW_SIZE_X /2, 70, font);
+		string replayText = "Press r to play again!";
+		renderText(replayText, WINDOW_SIZE_X /2, WINDOW_SIZE_Y /2, font);
 	}
 
 	// Score text
@@ -262,6 +264,10 @@ void Game::addScore(int roidLevel){
 	default:
 		break;
 	}
+	if (score >= (lifeEarned + 1) * SCORE_TO_GET_EXTRA_LIFE){
+		gamemgr.getPlayer()->oneUp();
+		lifeEarned++;
+	}
 }
 
 Game::Game(){
@@ -277,6 +283,7 @@ Game::Game(){
 	respawnDelay = false;
 	levelDelay = false;
 	score = 0;
+	lifeEarned = 0;
 }
 
 bool Game::init(){
@@ -407,6 +414,9 @@ bool Game::getInput(){
 					case SDLK_SPACE:
 						playerAction[SHOOTING] = true;
 						break;
+					case SDLK_r:
+						playerAction[REPLAY] = true;
+						break;
 					default :
 						break;
 				}
@@ -429,6 +439,9 @@ bool Game::getInput(){
 					case SDLK_SPACE:
 						playerAction[SHOOTING] = false;
 						break;
+					case SDLK_r:
+						playerAction[REPLAY] = false;
+						break;
 					default :
 						break;
 	    	    }
@@ -446,7 +459,7 @@ bool Game::scoreBoard(){
 	while (loop){
 		if ( !getInput() )
 			loop = false;
-		if (playerAction[SHOOTING]){
+		if (playerAction[REPLAY]){
 			loop = false;
 			return true;
 		}

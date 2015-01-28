@@ -31,6 +31,8 @@ public:
 	void setInvul(bool state);
 	// Subtracts one life from the player's life count 
 	void minusOneLife();
+	// Add one life to player's life count
+	void oneUp();
 	// Returns the number of lives the player has remaining
 	int getLivesLeft();
 

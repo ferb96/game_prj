@@ -28,6 +28,7 @@ private:
 		MOVING_LEFT,
 		MOVING_RIGHT,
 		SHOOTING,
+		REPLAY,
 		TOTAL
 	};
 
@@ -42,6 +43,7 @@ private:
 	unsigned int lastDeath;
 	unsigned int lastLevelClear;
 	unsigned int score;
+	unsigned int lifeEarned;
 	bool respawnDelay;
 	bool levelDelay;
 

@@ -31,6 +31,7 @@ const double PLAYER_SIDE_POINT_DISTANCE = (15.0 / 22.0) * PLAYER_HIT_RADIUS;
 const double EXHAUST_VARIABILITY = 1.3; 
 const double PLAYER_ACCELERATION = .08;
 const double PLAYER_TURN_RATE = .07;
+const int SCORE_TO_GET_EXTRA_LIFE = 10000;
 
 const int BULLET_RADIUS = 1;
 

@@ -50,6 +50,9 @@ void Player::setInvul(bool state){
 void Player::minusOneLife(){
 	livesLeft -= 1;
 }
+void Player::oneUp(){
+	livesLeft += 1;
+}
 int Player::getLivesLeft(){
 	return livesLeft;
 }
