@@ -7,10 +7,13 @@
 // THE GLORIOUS MAIN FUNCTION
 int main(){
 	srand(time(NULL));
-	Game theGame;
-	if ( !theGame.init() )
-		return -1;
 
-	theGame.runGame();
+	bool playAgain = false;
+	do{
+		Game theGame;
+		if ( !theGame.init() )
+			return -1;
+		play Again = theGame.runGame();
+	} while (playAgain);
 	return 0;
 }

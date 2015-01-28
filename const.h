@@ -1,3 +1,7 @@
+const int BIG_ASTEROID_SCORE = 50;
+const int MEDIUM_ASTEROID_SCORE = 100;
+const int SMALL_ASTEROID_SCORE = 150;
+
 const int WINDOW_SIZE_X = 800;
 const int WINDOW_SIZE_Y = 600;
 const int ASTEROID_INITIAL_RADIUS = 50;
