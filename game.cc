@@ -1,13 +1,13 @@
 #include "game.h"
 #include "gameState.h"
 #include "const.h"
+#include "poof.h"
 #include <SDL2/SDL.h>
 #include "SDL2/SDL2_gfxPrimitives.h"
-#include <vector>
-#include <cmath>
+#include "SDL2/SDL_ttf.h"
+#include <sstream>
 #include <iostream>
-#include "poof.h"
-#include <ctime>
+#include <string>
 using namespace std;
 
 /*
@@ -154,6 +154,11 @@ void Game::renderObjects(){
 	// Color of every other objects
 	SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 255 );
 
+	// The texts
+	string lvl = static_cast<ostringstream*>( &(ostringstream() << gamemgr.getLevel()) )->str();
+	lvl = "Level " + lvl;
+	renderText(lvl, WINDOW_SIZE_X / 2, 50);
+
 	// Render the player
 	Player* lePlayer = gamemgr.getPlayer();
 	 
@@ -178,6 +183,7 @@ void Game::renderObjects(){
 		bull->drawSelf(renderer);
 	}
 
+	//Render the Poofs
 	gamemgr.resetItePoof();
 	while ( !gamemgr.noMorePoof() ){
 		Poof* puff = gamemgr.getPoof();
@@ -188,9 +194,42 @@ void Game::renderObjects(){
 	SDL_RenderPresent( renderer );
 }
 
+void Game::renderText(string text, double x, double y){
+	SDL_Color textColor = { 0xFF, 0xFF, 0xFF };
+	SDL_Surface* textSurface = TTF_RenderText_Solid( font, text.c_str(), textColor );
+	if( textSurface == NULL )
+	{
+		cout << "Unable to render text surface! SDL_ttf Error: " << TTF_GetError() << endl;
+	}
+	else
+	{
+		//Create texture from surface pixels
+        texture = SDL_CreateTextureFromSurface( renderer, textSurface );
+		if( texture == NULL )
+		{
+			printf( "Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError() );
+		}
+		else
+		{
+			int xx = x - textSurface->w / 2;
+			int yy = y - textSurface->h / 2;
+			// The surface we are rendering to
+			SDL_Rect renderQuad = { xx, yy, textSurface->w, textSurface->h };
+
+			// Render to screen
+			SDL_RenderCopy( renderer, texture, NULL, &renderQuad );
+		}
+
+		//Get rid of old surface
+		SDL_FreeSurface( textSurface );
+		textSurface = NULL;
+	}
+}
+
 Game::Game(){
 	window = NULL;
-	this->renderer = NULL;
+	renderer = NULL;
+	texture = NULL;
 	for (int i = 0; i < TOTAL; i++)
 		playerAction[i] = false;
 	this->frame = 0;
@@ -225,6 +264,17 @@ bool Game::initSDL()
 	if ( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
 	{
 		std::cout << " Failed to initialize SDL : " << SDL_GetError() << std::endl;
+		return false;
+	}
+	if( TTF_Init() == -1 )
+	{
+		std::cout << " Failed to initialize SDL_ttf! SDL_ttf Error: " << TTF_GetError() << endl;
+		return false;
+	}
+	font = TTF_OpenFont( "zefont.ttf", 12 );
+	if( font == NULL )
+		{
+			cout << " Failed to load font! SDL_ttf Error: " << TTF_GetError() << endl;
 		return false;
 	}
  
@@ -268,9 +318,12 @@ void Game::setupRenderer()
 
 void Game::close()
 {
+	//Destroy Texture
+	SDL_DestroyTexture( texture );
+	texture = NULL;
 
 	//Destroy Renderer
-	SDL_DestroyRenderer( this->renderer );
+	SDL_DestroyRenderer( renderer );
 	this->renderer = NULL;
 
 	//Destroy window

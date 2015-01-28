@@ -21,7 +21,7 @@ PROGRAM = letest
 
 CXX_SRCS = object.cc player.cc main.cc game.cc gameState.cc bullet.cc asteroid.cc poof.cc
 
-CXXLIBS = -lSDL2 -lSDL2_gfx
+CXXLIBS = -lSDL2 -lSDL2_gfx -lSDL2_ttf
 
 CXXINCLUDEPATHS = 
 

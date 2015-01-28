@@ -3,6 +3,8 @@
 
 #include <SDL2/SDL.h>
 #include "SDL2/SDL2_gfxPrimitives.h"
+#include "SDL2/SDL_ttf.h"
+#include <string>
 #include <vector>
 #include "asteroid.h"
 #include "bullet.h"
@@ -49,6 +51,11 @@ private:
 	//SDL elements
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+	SDL_Texture* texture;
+	TTF_Font *font;
+
+	//utility functions
+	void renderText(string text, double x, double y);
 
 	//init functions
 	bool initSDL();
