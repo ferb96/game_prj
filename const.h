@@ -1,6 +1,11 @@
+
 const double RADIAN_CIRCLE = 2 * M_PI;
 const double THIRD_OF_CIRCLE = RADIAN_CIRCLE / 3;
 const double QUARTER_CIRCLE = RADIAN_CIRCLE / 4;
+
+const int BIG_ASTEROID_SCORE = 50;
+const int MEDIUM_ASTEROID_SCORE = 100;
+const int SMALL_ASTEROID_SCORE = 150;
 
 const int WINDOW_SIZE_X = 800;
 const int WINDOW_SIZE_Y = 600;

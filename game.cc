@@ -13,21 +13,24 @@ using namespace std;
 /*
  * Implementing the functions in the Game class
  */
-void Game::runGame(){
-
+bool Game::runGame(){
 	gamemgr.initLevel();
-	gameLoop();
-	//scoreBoard();
+	if (!gameLoop())
+		return false;
+	bool playAgain = scoreBoard();
 	close();
+	return playAgain;
 }
 
-void Game::gameLoop(){
+bool Game::gameLoop(){
 	bool loop = true;
 	while (loop){
 		if ( !checkLevel() )
 			loop = false;
-		if ( !getInput() )
+		if ( !getInput() ){
 			loop = false;
+			return false;
+		}
 		processInput();
 		checkCollisions();
 		moveObjects();
@@ -35,6 +38,7 @@ void Game::gameLoop(){
 		frame++;
 		SDL_Delay(17);
 	}
+	return true;
 }
 
 bool Game::checkLevel(){
@@ -81,6 +85,7 @@ void Game::checkCollisions(){
 			gamemgr.addPoofs(lePlayer->goBoom());
 			lePlayer->setAlive(false);
 			lePlayer->minusOneLife();
+			addScore(roid->getLevel());
 			gamemgr.splitAsteroid(roid);
 		}
 		gamemgr.resetIteBullet();
@@ -89,6 +94,7 @@ void Game::checkCollisions(){
 			//check for collision between roid and bull
 			if ( roid->checkCollision(bull) ){
 				gamemgr.addPoofs(roid->goBoom());
+				addScore(roid->getLevel());
 				gamemgr.splitAsteroid(roid);
 				gamemgr.delBullet();
 			}
@@ -144,6 +150,7 @@ void Game::processInput(){
 }
 
 void Game::renderObjects(){
+	Player* lePlayer = gamemgr.getPlayer();
 	
 	// Change color of background
 	SDL_SetRenderDrawColor( renderer, 0x00, 0x00, 0x00, 255 );
@@ -154,14 +161,28 @@ void Game::renderObjects(){
 	// Color of every other objects
 	SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 255 );
 
-	// The texts
+	// Level text
 	string lvl = static_cast<ostringstream*>( &(ostringstream() << gamemgr.getLevel()) )->str();
 	lvl = "Level " + lvl;
-	renderText(lvl, WINDOW_SIZE_X / 2, LEVEL_TEXT_DISTANCE_FROM_TOP);
+	renderText(lvl, WINDOW_SIZE_X / 2, LEVEL_TEXT_DISTANCE_FROM_TOP, font);
+	
+	// Lives text
+	if (lePlayer->getLivesLeft() > 0){
+		string lives = "";
+		for (int i = 0; i < lePlayer->getLivesLeft(); i++)
+			lives += "♥";
+		renderText(lives, WINDOW_SIZE_X / 2, 70, symbolfont);
+	}
+	else{
+		string gameOverText = "!!! GAME OVER !!!";
+		renderText(gameOverText, WINDOW_SIZE_X /2, 70, font);
+	}
+
+	// Score text
+	string scoreText = static_cast<ostringstream*>( &(ostringstream() << score) )->str();
+	renderText(scoreText, WINDOW_SIZE_X /2, 90, font);
 
 	// Render the player
-	Player* lePlayer = gamemgr.getPlayer();
-	 
 	if (lePlayer->isAlive()) {
 		if (!lePlayer->isInvul())
 			lePlayer->drawSelf( renderer );
@@ -194,9 +215,10 @@ void Game::renderObjects(){
 	SDL_RenderPresent( renderer );
 }
 
-void Game::renderText(string text, double x, double y){
+void Game::renderText(string text, double x, double y, TTF_Font *font){
 	SDL_Color textColor = { 0xFF, 0xFF, 0xFF };
-	SDL_Surface* textSurface = TTF_RenderText_Solid( font, text.c_str(), textColor );
+	SDL_Color bgColor = { 0x00, 0x00, 0x00 };
+	SDL_Surface* textSurface = TTF_RenderUTF8_Shaded( font, text.c_str(), textColor, bgColor );
 	if( textSurface == NULL )
 	{
 		cout << "Unable to render text surface! SDL_ttf Error: " << TTF_GetError() << endl;
@@ -226,18 +248,35 @@ void Game::renderText(string text, double x, double y){
 	}
 }
 
+void Game::addScore(int roidLevel){
+	switch (roidLevel){
+	case 0:
+		score += BIG_ASTEROID_SCORE;
+		break;
+	case 1:
+		score += MEDIUM_ASTEROID_SCORE;
+		break;
+	case 2:
+		score += SMALL_ASTEROID_SCORE;
+		break;
+	default:
+		break;
+	}
+}
+
 Game::Game(){
 	window = NULL;
 	renderer = NULL;
 	texture = NULL;
 	for (int i = 0; i < TOTAL; i++)
 		playerAction[i] = false;
-	this->frame = 0;
+	frame = 0;
 	lastShot = 0;
 	lastDeath = 0;
 	lastLevelClear = 0;
 	respawnDelay = false;
 	levelDelay = false;
+	score = 0;
 }
 
 bool Game::init(){
@@ -272,6 +311,12 @@ bool Game::initSDL()
 		return false;
 	}
 	font = TTF_OpenFont( "zefont.ttf", NORMAL_FONT_SIZE );
+	if( font == NULL )
+		{
+			cout << " Failed to load font! SDL_ttf Error: " << TTF_GetError() << endl;
+		return false;
+	}
+	symbolfont = TTF_OpenFont( "zefont2.ttf", 15 );
 	if( font == NULL )
 		{
 			cout << " Failed to load font! SDL_ttf Error: " << TTF_GetError() << endl;
@@ -394,4 +439,20 @@ bool Game::getInput(){
 		}
 	}
 	return notQuitted;
+}
+
+bool Game::scoreBoard(){
+	bool loop = true;
+	while (loop){
+		if ( !getInput() )
+			loop = false;
+		if (playerAction[SHOOTING]){
+			loop = false;
+			return true;
+		}
+		moveObjects();
+		renderObjects();
+		SDL_Delay(17);
+	}
+	return false;
 }

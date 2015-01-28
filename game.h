@@ -18,7 +18,7 @@ class Game
 public:
 	Game();
 	bool init();
-	void runGame(); 
+	bool runGame(); 
 
 private:
 	//enumerators
@@ -41,7 +41,7 @@ private:
 	unsigned int lastShot;
 	unsigned int lastDeath;
 	unsigned int lastLevelClear;
-	//unsigned int frameCount;
+	unsigned int score;
 	bool respawnDelay;
 	bool levelDelay;
 
@@ -53,9 +53,11 @@ private:
 	SDL_Renderer* renderer;
 	SDL_Texture* texture;
 	TTF_Font *font;
+	TTF_Font *symbolfont;
 
 	//utility functions
-	void renderText(string text, double x, double y);
+	void renderText(string text, double x, double y, TTF_Font *font);
+	void addScore(int roidLevel);
 
 	//init functions
 	bool initSDL();
@@ -64,7 +66,7 @@ private:
 	void setupRenderer();
 
 	//processing functions
-	void gameLoop();
+	bool gameLoop();
 	bool checkLevel();
 	bool getInput();
 	void processInput();
@@ -72,7 +74,7 @@ private:
 	void splitAsteroid(Asteroid* roid);
 	void moveObjects();
 	void renderObjects();
-	//void scoreBoard();
+	bool scoreBoard();
 	void close();
 };
 
