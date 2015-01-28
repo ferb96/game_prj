@@ -66,7 +66,7 @@ private:
 	void setupRenderer();
 
 	//processing functions
-	void gameLoop();
+	bool gameLoop();
 	bool checkLevel();
 	bool getInput();
 	void processInput();

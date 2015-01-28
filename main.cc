@@ -13,7 +13,7 @@ int main(){
 		Game theGame;
 		if ( !theGame.init() )
 			return -1;
-		play Again = theGame.runGame();
+		playAgain = theGame.runGame();
 	} while (playAgain);
 	return 0;
 }

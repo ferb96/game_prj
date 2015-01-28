@@ -15,19 +15,22 @@ using namespace std;
  */
 bool Game::runGame(){
 	gamemgr.initLevel();
-	gameLoop();
+	if (!gameLoop())
+		return false;
 	bool playAgain = scoreBoard();
 	close();
 	return playAgain;
 }
 
-void Game::gameLoop(){
+bool Game::gameLoop(){
 	bool loop = true;
 	while (loop){
 		if ( !checkLevel() )
 			loop = false;
-		if ( !getInput() )
+		if ( !getInput() ){
 			loop = false;
+			return false;
+		}
 		processInput();
 		checkCollisions();
 		moveObjects();
@@ -35,6 +38,7 @@ void Game::gameLoop(){
 		frame++;
 		SDL_Delay(17);
 	}
+	return true;
 }
 
 bool Game::checkLevel(){
@@ -168,6 +172,10 @@ void Game::renderObjects(){
 		for (int i = 0; i < lePlayer->getLivesLeft(); i++)
 			lives += "♥";
 		renderText(lives, WINDOW_SIZE_X / 2, 70, symbolfont);
+	}
+	else{
+		string gameOverText = "!!! GAME OVER !!!";
+		renderText(gameOverText, WINDOW_SIZE_X /2, 70, font);
 	}
 
 	// Score text
