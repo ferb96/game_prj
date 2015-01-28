@@ -126,13 +126,13 @@ void Game::processInput(){
 	Player* lePlayer = gamemgr.getPlayer();
 	if (lePlayer->isAlive()){
 		if (playerAction[MOVING_UP])
-			lePlayer->setAccel(.08);
+			lePlayer->setAccel(PLAYER_ACCELERATION);
 		if (!playerAction[MOVING_UP])
 			lePlayer->setAccel(0);
 		if (playerAction[MOVING_RIGHT])
-			lePlayer->changeTrajectory(.07);
+			lePlayer->changeTrajectory(PLAYER_TURN_RATE);
 		if (playerAction[MOVING_LEFT])
-			lePlayer->changeTrajectory(-.07);
+			lePlayer->changeTrajectory(-PLAYER_TURN_RATE);
 		if (playerAction[SHOOTING])
 			if (SDL_GetTicks() - lastShot > DELAY_BETWEEN_BULLETS){
 				lastShot = SDL_GetTicks();
@@ -157,7 +157,7 @@ void Game::renderObjects(){
 	// The texts
 	string lvl = static_cast<ostringstream*>( &(ostringstream() << gamemgr.getLevel()) )->str();
 	lvl = "Level " + lvl;
-	renderText(lvl, WINDOW_SIZE_X / 2, 50);
+	renderText(lvl, WINDOW_SIZE_X / 2, LEVEL_TEXT_DISTANCE_FROM_TOP);
 
 	// Render the player
 	Player* lePlayer = gamemgr.getPlayer();
@@ -271,7 +271,7 @@ bool Game::initSDL()
 		std::cout << " Failed to initialize SDL_ttf! SDL_ttf Error: " << TTF_GetError() << endl;
 		return false;
 	}
-	font = TTF_OpenFont( "zefont.ttf", 12 );
+	font = TTF_OpenFont( "zefont.ttf", NORMAL_FONT_SIZE );
 	if( font == NULL )
 		{
 			cout << " Failed to load font! SDL_ttf Error: " << TTF_GetError() << endl;

@@ -48,7 +48,7 @@ void GameState::initLevel(){
 		} while (distanceFromPlayer < SAFETY_ZONE);
 		double roidTraj = (rand() % 100 + 1) * 1.0 / 100 * M_PI*2;
 		double roidSpd = (rand() % 100 + 1) * 1.0 / 100 * (roidMaxSpd - roidMinSpd) + roidMinSpd;
-		Asteroid* roid = new Asteroid(roidX, roidY, roidTraj, roidSpd, ASTEROID_INITIAL_RADIUS, 0);
+		Asteroid* roid = new Asteroid(roidX, roidY, roidTraj, roidSpd, 0);
 		addAsteroid(roid);
 		cout << "adding a roid at x=" << roidX << " y=" << roidY << " traj=" << roidTraj << " spd=" << roidSpd << endl;
 	}
@@ -57,8 +57,8 @@ void GameState::initLevel(){
 void GameState::splitAsteroid(Asteroid* roid){
 	delAsteroid();
 	if (roid->getLevel() < 2){
-		Asteroid* newroid1 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() + M_PI/6, roid->getVel() + .5, 50, roid->getLevel()+1);
-		Asteroid* newroid2 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() - M_PI/6, roid->getVel() + .5, 50, roid->getLevel()+1);
+		Asteroid* newroid1 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() + M_PI/6, roid->getVel() + .5, roid->getLevel()+1);
+		Asteroid* newroid2 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() - M_PI/6, roid->getVel() + .5, roid->getLevel()+1);
 		addAsteroid(newroid1);
 		addAsteroid(newroid2);
 	}

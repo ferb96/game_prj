@@ -6,6 +6,6 @@ game.o: game.cc game.h asteroid.h object.h poof.h bullet.h player.h \
   gameState.h const.h
 gameState.o: gameState.cc gameState.h asteroid.h object.h poof.h bullet.h \
   player.h const.h
-bullet.o: bullet.cc bullet.h object.h
+bullet.o: bullet.cc bullet.h object.h const.h
 asteroid.o: asteroid.cc asteroid.h object.h poof.h bullet.h const.h
 poof.o: poof.cc bullet.h object.h poof.h

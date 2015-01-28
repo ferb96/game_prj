@@ -8,12 +8,15 @@
 #include "const.h"
 #include <iostream>
 #include <vector>
+#include <ctime>
 using namespace std;
 
 Player::Player(double x_pos, double y_pos, int lives)
 	: Object(x_pos, y_pos, 0.0, 0.0)
 {
-	setHitRad(22);
+	// Sets the hit radius and size of the player model (see const.h)
+	setHitRad(PLAYER_HIT_RADIUS);
+	//The player never begins the game in motion
 	accelMag = 0;
 	decelMag = 0;
 	decelAmt = 0.0;
@@ -24,9 +27,9 @@ Player::Player(double x_pos, double y_pos, int lives)
 }
 
 void Player::changeTrajectory(double addTraj) {
-	const double RADIAN_CIRCLE = 2 * M_PI;
 	trajectory += addTraj;
-	if (trajectory > RADIAN_CIRCLE)
+	// Resets the trajectory if it makes a full circle
+	if (trajectory > RADIAN_CIRCLE) // RADIAN_CIRCLE = 2 * M_PI, see const.h
 		trajectory -= RADIAN_CIRCLE;
 	else if (trajectory < 0)
 		trajectory += RADIAN_CIRCLE;
@@ -60,6 +63,7 @@ void Player::setDecel(double decel) {
 }
 
 void Player::resetPlayer(double x_pos, double y_pos){
+	// The player always respawns at the center of the screen, facing up
 	x = x_pos/2;
 	y = y_pos/2;
 	trajectory = 0.0;
@@ -104,7 +108,6 @@ void Player::updatePosition(int limitX, int limitY){
 	y -= velY;
 
 	// Screen wrap
-	// Screen wrap
 	if (x < 0 - hitRad)
 		x = limitX + hitRad;
 	if (x > limitX + hitRad)
@@ -116,53 +119,68 @@ void Player::updatePosition(int limitX, int limitY){
 }
 
 void Player::drawSelf(SDL_Renderer *rend) {
-	// calculate the front point
-	frontX = x + 25 * sin(trajectory);
-	frontY = y - 25 * cos(trajectory);
+	// calculates the front point
+	frontX = x + PLAYER_FRONT_POINT_DISTANCE * sin(trajectory);
+	frontY = y - PLAYER_FRONT_POINT_DISTANCE * cos(trajectory);
 
-	// calculate the right point
-	double nextAngle = trajectory + M_PI * 2/3;
-	double rightX = x + 15 * sin(nextAngle);
-	double rightY = y - 15 * cos(nextAngle);
+	// calculates the right point
+	double nextAngle = trajectory + THIRD_OF_CIRCLE;
+	double rightX = x + PLAYER_SIDE_POINT_DISTANCE * sin(nextAngle);
+	double rightY = y - PLAYER_SIDE_POINT_DISTANCE * cos(nextAngle);
 
-	// calculate the left point
-	nextAngle = trajectory - M_PI * 2/3;
-	double leftX = x + 15 * sin(nextAngle);
-	double leftY = y - 15 * cos(nextAngle);
+	// calculates the left point
+	nextAngle = trajectory - THIRD_OF_CIRCLE;
+	double leftX = x + PLAYER_SIDE_POINT_DISTANCE * sin(nextAngle);
+	double leftY = y - PLAYER_SIDE_POINT_DISTANCE * cos(nextAngle);
 
 	double baseMidX = ((rightX + leftX) / 2.0) + .5;
 	double baseMidY = ((rightY + leftY) / 2.0) + .5;
 
-	// draw the triangle
+	// draws the triangle
 	trigonRGBA(rend,
                	int(frontX + .5), int(frontY + .5), // x y of first vertex
                 int(rightX + .5), int(rightY + .5), // x y of second vertex
                 int(leftX + .5), int(leftY + .5), // x y of third vertex
                 0xFF, 0xFF, 0xFF, 255); // R G B Alpha values, white
+	// draws the center line
 	lineRGBA(rend,
 				int(frontX + .5), int(frontY + .5),
 				int(baseMidX), int(baseMidY),
 				0xFF, 0xFF, 0xFF, 255);
 
-	if (accelMag > 0) {
+	if (accelMag > 0) { // AKA if the player is accelerating / holding the front arrow
+		// Calculates the base points of the exhaust triangle
 		double leftMidX = ((baseMidX + leftX) / 2.0);
 		double leftMidY = ((baseMidY + leftY) / 2.0);
 		double rightMidX = ((baseMidX + rightX) / 2.0);
 		double rightMidY = ((baseMidY + rightY) / 2.0);
+		// Calcualates the final endpoint
 		double exhaustLen = sqrt(((leftX - rightX) * (leftX - rightX)) + ((leftY - rightY) * (leftY - rightY))) / 3;
 		double centerToBase = sqrt(((x - baseMidX) * (x - baseMidX)) + ((y - baseMidY) * (y - baseMidY)));
 		double totalDist = exhaustLen + centerToBase;
 		double exhaustTraj = (2 * M_PI) - trajectory;
-		/*double exhaustWid = sqrt(((leftX - rightX) * (leftX - rightX)) + ((leftY - rightY) * (leftY - rightY))) / 4;
-		double hypLen = sqrt((exhaustWid * exhaustWid) + (exhaustLen * exhaustLen));
-		double exhaustTheta = (M_PI / 2) - atan(exhaustLen / exhaustWid); */
 		double exhaustX = totalDist * (sin(exhaustTraj)) + x;
 		double exhaustY = totalDist * (cos(exhaustTraj)) + y;
-		trigonRGBA(rend,
-               	int(leftMidX + .5), int(leftMidY + .5), // x y of first vertex
-                int(rightMidX + .5), int(rightMidY + .5), // x y of second vertex
-                int(exhaustX + .5), int(exhaustY + .5), // x y of third vertex
-                0xFF, 0xFF, 0xFF, 255); // R G B Alpha values, white
+		/* Checks the current time before drawing the exhaust triangle. This simple if/else statement
+		 * creates the "flickering" exhause flame effect */
+		if (SDL_GetTicks() % 2 == 0) { // Draws the shorter triangle
+			trigonRGBA(rend,
+        	       	int(leftMidX + .5), int(leftMidY + .5), // x y of first vertex
+        	        int(rightMidX + .5), int(rightMidY + .5), // x y of second vertex
+        	        int(exhaustX + .5), int(exhaustY + .5), // x y of third vertex
+        	        0xFF, 0xFF, 0xFF, 255); // R G B Alpha values, white
+		}
+		else { // Draws the longer triangle
+			totalDist = totalDist * EXHAUST_VARIABILITY;
+			double exhaustX = totalDist * (sin(exhaustTraj)) + x;
+			double exhaustY = totalDist * (cos(exhaustTraj)) + y;
+			trigonRGBA(rend,
+        	       	int(leftMidX + .5), int(leftMidY + .5), // x y of first vertex
+        	        int(rightMidX + .5), int(rightMidY + .5), // x y of second vertex
+        	        int(exhaustX + .5), int(exhaustY + .5), // x y of third vertex
+        	        0xFF, 0xFF, 0xFF, 255); // R G B Alpha values, white
+		}
+		
 	}
 	
 }
@@ -170,8 +188,10 @@ void Player::drawSelf(SDL_Renderer *rend) {
 Bullet* Player::shoot(double bulletSpeed, double bulletReach) {
 	// Uses the pythagorean theorem to calculate total player velocity from x/y components
 	double bulletTraj = trajectory; // The new bullet's trajectory is the direction the player is facing
+	// The x and y components of the bullet's velocity
 	double finalX = velX + bulletSpeed * (sin(bulletTraj));
 	double finalY = velY + bulletSpeed * (cos(bulletTraj));
+	// The magnitude of the bullet velocity
 	double finalSpeed = sqrt((finalX * finalX) + (finalY * finalY));
 	double finalAlpha = (M_PI / 2) - atan2(finalY,finalX);
 
@@ -181,8 +201,11 @@ Bullet* Player::shoot(double bulletSpeed, double bulletReach) {
 }
 
 vector<Poof*> Player::goBoom() {
+	// Randomly determines the number of particles to make
 	int num = (rand() % 8) + 20;
+	// Creates the vector
 	vector<Poof*> boom;
+	// Creates the appropriate number of poofs with random trajectories and velocities
 	for (int i = 0; i < num; i ++) {
 		Poof* zoom = new Poof(x, y, (rand() % 100 + 1) * 1.0 / 100 * M_PI*2, ((rand() % 4) + 5), POOF_LIFESPAN * 3);
 		boom.push_back(zoom);

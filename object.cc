@@ -10,8 +10,6 @@ Object::Object(double x_pos, double y_pos, double traj, double iVel) {
 	trajectory = traj;
 	hitRad = 0;
 	// Breaks the initial velocity into its x and y components
-	// const double RADIAN_QUARTER = M_PI / 2;
-	// double trajTheta = RADIAN_QUARTER - trajectory;
 	velX = iVel * sin(trajectory);
 	velY = iVel * cos(trajectory);
 }
