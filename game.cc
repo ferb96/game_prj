@@ -36,7 +36,7 @@ bool Game::gameLoop(){
 		moveObjects();
 		renderObjects();
 		frame++;
-		SDL_Delay(17);
+		SDL_Delay(FRAME_RATE_DELAY);
 	}
 	return true;
 }
@@ -171,16 +171,16 @@ void Game::renderObjects(){
 		string lives = "";
 		for (int i = 0; i < lePlayer->getLivesLeft(); i++)
 			lives += "♥";
-		renderText(lives, WINDOW_SIZE_X / 2, 70, symbolfont);
+		renderText(lives, WINDOW_SIZE_X / 2, LIVES_TEXT_DISTANCE_FROM_TOP, symbolfont);
 	}
 	else{
 		string gameOverText = "!!! GAME OVER !!!";
-		renderText(gameOverText, WINDOW_SIZE_X /2, 70, font);
+		renderText(gameOverText, WINDOW_SIZE_X /2, LIVES_TEXT_DISTANCE_FROM_TOP, font);
 	}
 
 	// Score text
 	string scoreText = static_cast<ostringstream*>( &(ostringstream() << score) )->str();
-	renderText(scoreText, WINDOW_SIZE_X /2, 90, font);
+	renderText(scoreText, WINDOW_SIZE_X /2, POINTS_TEXT_DISTANCE_FROM_TOP, font);
 
 	// Render the player
 	if (lePlayer->isAlive()) {
@@ -316,7 +316,7 @@ bool Game::initSDL()
 			cout << " Failed to load font! SDL_ttf Error: " << TTF_GetError() << endl;
 		return false;
 	}
-	symbolfont = TTF_OpenFont( "zefont2.ttf", 15 );
+	symbolfont = TTF_OpenFont( "zefont2.ttf", LIVES_FONT_SIZE );
 	if( font == NULL )
 		{
 			cout << " Failed to load font! SDL_ttf Error: " << TTF_GetError() << endl;
@@ -452,7 +452,7 @@ bool Game::scoreBoard(){
 		}
 		moveObjects();
 		renderObjects();
-		SDL_Delay(17);
+		SDL_Delay(FRAME_RATE_DELAY);
 	}
 	return false;
 }
