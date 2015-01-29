@@ -13,7 +13,7 @@ class GameState
 public:
 	GameState();
 	void initLevel();
-	void splitAsteroid(Asteroid* roid);
+	void splitAsteroid(Asteroid*& roid);
 	void addPlayer(Player* playa);
 	void addAsteroid(Asteroid* roid);
 	void addBullet(Bullet* bull);
@@ -35,6 +35,11 @@ public:
 
 	bool zeroAsteroid();
 	int getLevel();
+
+	void destroyAsteroid(Asteroid*& roid);
+	void destroyBull(Bullet*& bull);
+	void destroyPoof(Poof*& poof);
+	void resetGameState();
 private:
 	vector<Asteroid*>::iterator iteRoid; // Asteroid iterator, pointing to current Asteroid object
 	vector<Bullet*>::iterator iteBull; // Bullet iterator, pointing to current Bullet object

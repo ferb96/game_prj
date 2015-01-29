@@ -6,6 +6,7 @@
 #include "const.h"
 #include "poof.h"
 #include <cmath>
+#include <cassert>
 using namespace std;
 
 GameState::GameState(){
@@ -31,7 +32,6 @@ void GameState::initLevel(){
 		roidMinSpd += ASTEROID_MAX_SPD/18;
 		roidMaxSpd += ASTEROID_MAX_SPD/15;
 	}
-	cout << "minspd =" << roidMinSpd << " maxspd=" << roidMaxSpd << endl;
 
 	Player* lePlayer = getPlayer();
 	//generating Asteroids
@@ -50,19 +50,21 @@ void GameState::initLevel(){
 		double roidSpd = (rand() % 100 + 1) * 1.0 / 100 * (roidMaxSpd - roidMinSpd) + roidMinSpd;
 		Asteroid* roid = new Asteroid(roidX, roidY, roidTraj, roidSpd, 0);
 		addAsteroid(roid);
-		cout << "adding a roid at x=" << roidX << " y=" << roidY << " traj=" << roidTraj << " spd=" << roidSpd << endl;
 	}
 }
 
-void GameState::splitAsteroid(Asteroid* roid){
-	delAsteroid();
-	if (roid->getLevel() < 2){
-		Asteroid* newroid1 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() + M_PI/6, roid->getVel() + .5, roid->getLevel()+1);
-		Asteroid* newroid2 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() - M_PI/6, roid->getVel() + .5, roid->getLevel()+1);
-		addAsteroid(newroid1);
-		addAsteroid(newroid2);
+void GameState::splitAsteroid(Asteroid*& roid){
+	if (roid != NULL){
+		delAsteroid();
+		if (roid->getLevel() < 2){
+			Asteroid* newroid1 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() + M_PI/6, roid->getVel() + .5, roid->getLevel()+1);
+			Asteroid* newroid2 = new Asteroid(roid->getX(), roid->getY(), roid->getTrajectory() - M_PI/6, roid->getVel() + .5, roid->getLevel()+1);
+			addAsteroid(newroid1);
+			addAsteroid(newroid2);
+		}
+		destroyAsteroid(roid);
+		resetIteRoid();
 	}
-	resetIteRoid();
 }
 
 void GameState::addPlayer(Player* playa){
@@ -71,16 +73,19 @@ void GameState::addPlayer(Player* playa){
 
 void GameState::addAsteroid(Asteroid* roid){
 	leAsteroids.push_back(roid);
+	cout << "adding a roid" << endl;
 }
 
 void GameState::addBullet(Bullet* bull){
 	leBullets.push_back(bull);
+	cout << "adding a bull" << endl;
 }
 
 void GameState::addPoofs(vector<Poof*> newPoofs){
 	for (int i = 0; i < newPoofs.size(); i++) {
 		lePoofs.push_back(newPoofs[i]);
 	}
+	cout << "adding " << newPoofs.size() << " poofs" << endl;
 }
 
 void GameState::delAsteroid(){
@@ -165,4 +170,51 @@ bool GameState::zeroAsteroid(){
 
 int GameState::getLevel(){
 	return level;
+}
+
+void GameState::destroyAsteroid(Asteroid*& roid){
+	delete roid;
+	roid = NULL;
+	cout << "Deallocating a roid" << endl;
+}
+
+void GameState::destroyBull(Bullet*& bull){
+	delete bull;
+	bull = NULL;
+	cout << "Deallocating a bull" << endl;
+}
+
+void GameState::destroyPoof(Poof*& poof){
+	delete poof;
+	poof = NULL;
+	cout << "Deallocating a poof" << endl;
+}
+
+void GameState::resetGameState(){
+	// Delete all asteroids
+	resetIteRoid();
+	while ( !noMoreAsteroid() ){
+		Asteroid* roid = getAsteroid();
+		delAsteroid();
+		destroyAsteroid(roid);
+	}
+	resetIteRoid();
+
+	// Delete all bullets
+	resetIteBullet();
+	while ( !noMoreBullet() ){
+		Bullet* bull = getBullet();
+		delBullet();
+		destroyBull(bull);
+	}
+	resetIteBullet();
+
+	// Delete all Poofs
+	resetItePoof();
+	while ( !noMorePoof() ){
+		Poof* poof = getPoof();
+		delPoof();
+		destroyPoof(poof);
+	}
+	resetItePoof();
 }

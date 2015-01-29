@@ -18,6 +18,7 @@ bool Game::runGame(){
 	if (!gameLoop())
 		return false;
 	bool playAgain = scoreBoard();
+	gamemgr.resetGameState();
 	close();
 	return playAgain;
 }
@@ -81,7 +82,7 @@ void Game::checkCollisions(){
 	while ( !gamemgr.noMoreAsteroid() ){
 		Asteroid* roid = gamemgr.getAsteroid();
 		//check for collision between player and roid
-		if ( lePlayer->checkCollision(roid) && lePlayer->isAlive() && !lePlayer->isInvul()){
+		if ( roid != NULL && lePlayer->checkCollision(roid) && lePlayer->isAlive() && !lePlayer->isInvul()){
 			gamemgr.addPoofs(lePlayer->goBoom());
 			lePlayer->setAlive(false);
 			lePlayer->minusOneLife();
@@ -92,11 +93,12 @@ void Game::checkCollisions(){
 		while ( !gamemgr.noMoreBullet() ){
 			Bullet* bull = gamemgr.getBullet();
 			//check for collision between roid and bull
-			if ( roid->checkCollision(bull) ){
+			if ( roid != NULL && bull != NULL && roid->checkCollision(bull) ){
 				gamemgr.addPoofs(roid->goBoom());
 				addScore(roid->getLevel());
 				gamemgr.splitAsteroid(roid);
 				gamemgr.delBullet();
+				gamemgr.destroyBull(bull);
 			}
 		}
 	}
@@ -115,16 +117,20 @@ void Game::moveObjects(){
 		Bullet* bull = gamemgr.getBullet();
 		bull->updatePosition(WINDOW_SIZE_X, WINDOW_SIZE_Y);
 		//check for bullet expiration
-		if ( bull->isExpired() )
+		if ( bull->isExpired() ){
 			gamemgr.delBullet();
+			gamemgr.destroyBull(bull);
+		}
 	}
 	gamemgr.resetItePoof();
 	while ( !gamemgr.noMorePoof() ){
 		Poof* puff = gamemgr.getPoof();
 		puff->updatePosition(WINDOW_SIZE_X, WINDOW_SIZE_Y);
 		//check for bullet expiration
-		if ( puff->isExpired() )
+		if ( puff->isExpired() ){
 			gamemgr.delPoof();
+			gamemgr.destroyPoof(puff);
+		}
 	}
 }
 
