@@ -71,19 +71,16 @@ void GameState::addPlayer(Player* playa){
 
 void GameState::addAsteroid(Asteroid* roid){
 	leAsteroids.push_back(roid);
-	cout << "adding a roid" << endl;
 }
 
 void GameState::addBullet(Bullet* bull){
 	leBullets.push_back(bull);
-	cout << "adding a bull" << endl;
 }
 
 void GameState::addPoofs(vector<Poof*> newPoofs){
 	for (int i = 0; i < newPoofs.size(); i++) {
 		lePoofs.push_back(newPoofs[i]);
 	}
-	cout << "adding " << newPoofs.size() << " poofs" << endl;
 }
 
 void GameState::delAsteroid(){
@@ -173,19 +170,16 @@ int GameState::getLevel(){
 void GameState::destroyAsteroid(Asteroid*& roid){
 	delete roid;
 	roid = NULL;
-	cout << "Deallocating a roid" << endl;
 }
 
 void GameState::destroyBull(Bullet*& bull){
 	delete bull;
 	bull = NULL;
-	cout << "Deallocating a bull" << endl;
 }
 
 void GameState::destroyPoof(Poof*& poof){
 	delete poof;
 	poof = NULL;
-	cout << "Deallocating a poof" << endl;
 }
 
 void GameState::resetGameState(){
