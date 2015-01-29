@@ -13,13 +13,13 @@ using namespace std;
 /*
  * Implementing the functions in the Game class
  */
-bool Game::runGame(){
+bool Game::runGame(GameState& thegamestate){
+	gamemgr = thegamestate;
+	gamemgr.resetGameState();
 	gamemgr.initLevel();
 	if (!gameLoop())
 		return false;
 	bool playAgain = scoreBoard();
-	gamemgr.resetGameState();
-	close();
 	return playAgain;
 }
 

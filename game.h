@@ -18,7 +18,8 @@ class Game
 public:
 	Game();
 	bool init();
-	bool runGame(); 
+	bool runGame(GameState& thegamestate);
+	void close();
 
 private:
 	//enumerators
@@ -77,7 +78,6 @@ private:
 	void moveObjects();
 	void renderObjects();
 	bool scoreBoard();
-	void close();
 };
 
 #endif /* GAME_H */

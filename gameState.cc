@@ -10,9 +10,7 @@
 using namespace std;
 
 GameState::GameState(){
-	Player* lePlayer = new Player(WINDOW_SIZE_X/2, WINDOW_SIZE_Y/2, PLAYER_LIVES);
-	lePlayer->setDecel(PLAYER_DECELERATION);
-	addPlayer(lePlayer);
+	lePlayer = NULL;
 	iteRoid = leAsteroids.begin();
 	iteBull = leBullets.begin();
 	level = 0;
@@ -217,4 +215,15 @@ void GameState::resetGameState(){
 		destroyPoof(poof);
 	}
 	resetItePoof();
+
+	if (lePlayer != NULL){
+		delete lePlayer;
+		lePlayer = NULL;
+	}
+
+	if (lePlayer == NULL){
+		Player* newPlayer = new Player(WINDOW_SIZE_X/2, WINDOW_SIZE_Y/2, PLAYER_LIVES);
+		newPlayer->setDecel(PLAYER_DECELERATION);
+		addPlayer(newPlayer);
+	}
 }
