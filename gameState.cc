@@ -15,15 +15,15 @@ GameState::GameState(){
 	iteRoid = leAsteroids.begin();
 	iteBull = leBullets.begin();
 	level = 0;
-	minRoid = 4;
-	maxRoid = 6;
+	minRoid = 2;
+	maxRoid = 4;
 	roidMinSpd = .5;
 	roidMaxSpd = 1.5;
 }
 
 void GameState::initLevel(){
 	level++;
-	if (level % 5 == 0 && level != 1){
+	if (level % 3 == 0 && level != 1){
 		maxRoid++;
 		minRoid++;
 	}
