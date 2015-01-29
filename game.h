@@ -43,8 +43,6 @@ private:
 	unsigned int lastShot;
 	unsigned int lastDeath;
 	unsigned int lastLevelClear;
-	unsigned int score;
-	unsigned int lifeEarned;
 	bool respawnDelay;
 	bool levelDelay;
 
@@ -60,7 +58,6 @@ private:
 
 	//utility functions
 	void renderText(string text, double x, double y, TTF_Font *font);
-	void addScore(int roidLevel);
 
 	//init functions
 	bool initSDL();

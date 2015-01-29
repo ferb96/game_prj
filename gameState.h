@@ -35,6 +35,8 @@ public:
 
 	bool zeroAsteroid();
 	int getLevel();
+	void addScore(int roidLevel);
+	unsigned int getScore();
 
 	void destroyAsteroid(Asteroid*& roid);
 	void destroyBull(Bullet*& bull);
@@ -49,6 +51,9 @@ private:
 	vector<Poof*> lePoofs;
 	Player* lePlayer;
 
+
+	unsigned int score;
+	unsigned int lifeEarned;
 	int level;
 	int minRoid;
 	int maxRoid;

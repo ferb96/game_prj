@@ -86,7 +86,7 @@ void Game::checkCollisions(){
 			gamemgr.addPoofs(lePlayer->goBoom());
 			lePlayer->setAlive(false);
 			lePlayer->minusOneLife();
-			addScore(roid->getLevel());
+			gamemgr.addScore(roid->getLevel());
 			gamemgr.splitAsteroid(roid);
 		}
 		gamemgr.resetIteBullet();
@@ -95,7 +95,7 @@ void Game::checkCollisions(){
 			//check for collision between roid and bull
 			if ( roid != NULL && bull != NULL && roid->checkCollision(bull) ){
 				gamemgr.addPoofs(roid->goBoom());
-				addScore(roid->getLevel());
+				gamemgr.addScore(roid->getLevel());
 				gamemgr.splitAsteroid(roid);
 				gamemgr.delBullet();
 				gamemgr.destroyBull(bull);
@@ -187,7 +187,7 @@ void Game::renderObjects(){
 	}
 
 	// Score text
-	string scoreText = static_cast<ostringstream*>( &(ostringstream() << score) )->str();
+	string scoreText = static_cast<ostringstream*>( &(ostringstream() << gamemgr.getScore()) )->str();
 	renderText(scoreText, WINDOW_SIZE_X /2, POINTS_TEXT_DISTANCE_FROM_TOP, font);
 
 	// Render the player
@@ -256,26 +256,6 @@ void Game::renderText(string text, double x, double y, TTF_Font *font){
 	}
 }
 
-void Game::addScore(int roidLevel){
-	switch (roidLevel){
-	case 0:
-		score += BIG_ASTEROID_SCORE;
-		break;
-	case 1:
-		score += MEDIUM_ASTEROID_SCORE;
-		break;
-	case 2:
-		score += SMALL_ASTEROID_SCORE;
-		break;
-	default:
-		break;
-	}
-	if (score >= (lifeEarned + 1) * SCORE_TO_GET_EXTRA_LIFE){
-		gamemgr.getPlayer()->oneUp();
-		lifeEarned++;
-	}
-}
-
 Game::Game(){
 	window = NULL;
 	renderer = NULL;
@@ -288,8 +268,6 @@ Game::Game(){
 	lastLevelClear = 0;
 	respawnDelay = false;
 	levelDelay = false;
-	score = 0;
-	lifeEarned = 0;
 }
 
 bool Game::init(){

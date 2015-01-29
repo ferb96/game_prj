@@ -14,6 +14,8 @@ GameState::GameState(){
 	iteRoid = leAsteroids.begin();
 	iteBull = leBullets.begin();
 	level = 0;
+	score = 0;
+	lifeEarned = 0;
 	minRoid = 2;
 	maxRoid = 4;
 	roidMinSpd = .5;
@@ -165,6 +167,30 @@ bool GameState::zeroAsteroid(){
 
 int GameState::getLevel(){
 	return level;
+}
+
+void GameState::addScore(int roidLevel){
+	switch (roidLevel){
+	case 0:
+		score += BIG_ASTEROID_SCORE;
+		break;
+	case 1:
+		score += MEDIUM_ASTEROID_SCORE;
+		break;
+	case 2:
+		score += SMALL_ASTEROID_SCORE;
+		break;
+	default:
+		break;
+	}
+	if (score >= (lifeEarned + 1) * SCORE_TO_GET_EXTRA_LIFE){
+		lePlayer->oneUp();
+		lifeEarned++;
+	}
+}
+
+unsigned int GameState::getScore(){
+	return score;
 }
 
 void GameState::destroyAsteroid(Asteroid*& roid){
