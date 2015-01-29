@@ -6,6 +6,7 @@ const double QUARTER_CIRCLE = RADIAN_CIRCLE / 4;
 const int BIG_ASTEROID_SCORE = 50;
 const int MEDIUM_ASTEROID_SCORE = 100;
 const int SMALL_ASTEROID_SCORE = 150;
+const int ASTEROID_INITIAL_RADIUS = 50;
 
 const int WINDOW_SIZE_X = 800;
 const int WINDOW_SIZE_Y = 600;
@@ -32,7 +33,7 @@ const double PLAYER_ACCELERATION = .08;
 const double PLAYER_TURN_RATE = .07;
 const int SCORE_TO_GET_EXTRA_LIFE = 10000;
 
-const int BULLET_RADIUS = 600;
+const int BULLET_RADIUS = 1;
 
 const int LEVEL_TEXT_DISTANCE_FROM_TOP = 50;
 const int LIVES_TEXT_DISTANCE_FROM_TOP = 70;
