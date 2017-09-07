@@ -21,4 +21,16 @@ Basic game features include:
 - Difficulty gets higher the longer you survive.
 - When you are defeated, you have the option to replay by pressing 'R'
 
-## 
+## Installation
+
+If you want to play it on your machine (Linux / Mac only, sorry), you must first install `SDL2`, `SDL2_gfx` and `SDL2_ttf` dev library. For ubuntu, it's `sudo apt-get install libsdl2-dev libsdl2-gfx-dev libsdl2-ttf-dev`
+
+- clone the repo
+- cd into repo
+- Make sure you installed the SDL2 library above
+- `make`
+- Run the game by `./asteroid`
+
+## Screenshot
+
+![screenshot](https://github.com/ferb96/game_prj/raw/master/screenshot.png)
