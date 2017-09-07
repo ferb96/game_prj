@@ -1,38 +1,24 @@
-# game_prj
+# Asteroid
 
-	As a game, Asteroids shares territory with Tetris for being a program tha updates and animates continuously, 
-	independent from user input. If you stand still, an asteroid is liable to knock you out of space. For this reason 
-	(among others), we deemed that the cwin program provided in-class was insufficient to properly construct it.
+A simple arcade-style Asteroid game written in C++ using SDL2 library.
 
-	We had reason to think that SDL would provide us with the functionality we required at a difficulty manageable in 
-	the time provided. Furthermore, SDL is common, and we believed we may be leaving class with skills we would find 
-	useful later in life. We used an online tutorial from Lazy Foo' Productions (found at this address: http://lazyfoo
-	.net/tutorials/SDL/index.php) to learn the basics of SDL functionality. For the functions that draw basic shapes in the window, we used the extension library SDL_gfx; for text, we used SDL_ttf. 
+## Overview
 
-	A heavily object-oriented design fit the challenges of programming this game well. There are four types of 
-	objects apparent on-screen: Player, Asteroid, Bullet, and Poof. Player, Asteroid and Bullet inherit from the 
-	invisible Object class, while Poof inherits from Bullet. Object contains data members and functions common to 
-	some or all of the visible classes, such as x/y coordinates, trajectory, x/y velocity, and a function that checks 
-	collision with another object. Every Object inheritor has a drawSelf() function, which draws the desired shape 
-	relative to that object's position and (in the case of Player) trajectory. An asteroid can be one of four 
-	different shapes, a random data member generated in its constructor. A Player is an isosceles triangle with a 
-	line running from the long point to the midpoint of the base, and an exhaust triangle that animates if the player 
-	is moving. The bullet is a circle with a radius of one pixel and a Poof is always just a single pixel. "Poof" is 
-	a simple class that represents a single pixel with a velocity and trajectory which expires after a set amount of 
-	time (like a bullet) but does not collide with anything (not like a bullet). It is used to create the particle 
-	bursts that fan out after an Asteroid or Player is destroyed.
+The game is the final project of a 3-week intensive C++ programming course. In the course, the professor gave us a graphical library designed for learners called cwin to work with. However its capabilities are quite limited and can only update the screen whenever there is user input. As a result, me and my coding partner ended up choosing SDL2, a full-fledged graphical library, to use for making our game of choice. Furthermore, SDL is commonly used and we believe it will give us neccessary skills later on.
 
-	The GameState object is essentially a registry of vectors with matching accessors and mutators to keep track of 
-	every object in the game. It has a couple useful functions of its own as well; the GameState is responsible for 
-	initializing the level (with the initLevel() function) by creating a host of new asteroids with random parameters.
-	GameState also manages asteroid splitting; when an Asteroid collides with a bullet, the asteroid is deleted from 
-	the game's vector, deallocated, and replaced by two new asteroids of a greater level with speeds and tajectories 
-	loosely based on that of the original (handled by the splitAsteroid() function).
+The game uses a heavily object-oriented design. The four objects of the game (Player, Asteroid, Bullet, and Poof - an element purely for cosmetic purposes) are all inherited from the Object class, and implement their own function such as moving, drawing, and exploding. The other two objects are unique: GameState keeps track of everything in play as well as initializing the game and create new levels; and the Game class controls SDL and handles input, output and execute the main game loop.
 
-	Virtually everything else is handled by the Game class. Game holds a number of data members necessary for 
-	operating SDL, keeping track of player actions and handling global variables like score and lives. Game's 
-	runGame() function either directly or vicariously calls all necessary member functions needed to run the program. 
-	runGame() calls gameLoop(), a function that repeats indefinitely until the program is closed and calls 
-	processInput(), checkCollisions(), moveObjects() and renderObjects() to move and animate every object held in the
-	GameState. When gameLoop() ends, runGame() calls scoreBoard(), which creates the endgame screen that waits for
-	the player's input to reset the GameState and play again. 
+## Features
+
+Basic game features include:
+
+- Moving your ship around using Left and Right for turning and Up for accelerating.
+- Press/Hold Space to shoot. Bullets have a limited lifetime.
+- The game field is bounded and wrap-around in all edge. Meaning any objects go out to the left will appear on the right.
+- Asteroid when hit by a bullet will shatter and broken into 2 smaller pieces. There are 3 levels of asteroid sizes.
+- Big asteroids give 50 points, medium ones give 100 points and small ones give 150 points.
+- For every 10000 points you get an extra life.
+- Difficulty gets higher the longer you survive.
+- When you are defeated, you have the option to replay by pressing 'R'
+
+## 

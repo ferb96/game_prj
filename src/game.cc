@@ -301,13 +301,13 @@ bool Game::initSDL()
 		std::cout << " Failed to initialize SDL_ttf! SDL_ttf Error: " << TTF_GetError() << endl;
 		return false;
 	}
-	font = TTF_OpenFont( "zefont.ttf", NORMAL_FONT_SIZE );
+	font = TTF_OpenFont( "fonts/zefont.ttf", NORMAL_FONT_SIZE );
 	if( font == NULL )
 		{
 			cout << " Failed to load font! SDL_ttf Error: " << TTF_GetError() << endl;
 		return false;
 	}
-	symbolfont = TTF_OpenFont( "zefont2.ttf", LIVES_FONT_SIZE );
+	symbolfont = TTF_OpenFont( "fonts/zefont2.ttf", LIVES_FONT_SIZE );
 	if( font == NULL )
 		{
 			cout << " Failed to load font! SDL_ttf Error: " << TTF_GetError() << endl;
