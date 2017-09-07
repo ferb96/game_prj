@@ -8,6 +8,8 @@ The game is the final project of a 3-week intensive C++ programming course. In t
 
 The game uses a heavily object-oriented design. The four objects of the game (Player, Asteroid, Bullet, and Poof - an element purely for cosmetic purposes) are all inherited from the Object class, and implement their own function such as moving, drawing, and exploding. The other two objects are unique: GameState keeps track of everything in play as well as initializing the game and create new levels; and the Game class controls SDL and handles input, output and execute the main game loop.
 
+This project would not came to be without my coding partner Jack Poblocki https://github.com/jpobloc2/
+
 ## Features
 
 Basic game features include:
